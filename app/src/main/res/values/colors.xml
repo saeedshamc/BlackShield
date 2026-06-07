@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="sentinel_background">#FF0A0E14</color>
+    <color name="sentinel_primary">#FF00E5FF</color>
+    <color name="sentinel_surface">#FF121820</color>
+    <color name="ic_launcher_background">#0A0E14</color>
+</resources>

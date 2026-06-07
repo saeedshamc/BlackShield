@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Sentinel" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">@color/sentinel_background</item>
+        <item name="android:navigationBarColor">@color/sentinel_background</item>
+        <item name="android:windowBackground">@color/sentinel_background</item>
+    </style>
+    <style name="Theme.Sentinel.Overlay" parent="Theme.Sentinel">
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sentinel</string>
+    <string name="panic_tile_label">Sentinel Panic</string>
+    <string name="accessibility_service_description">Sentinel monitors app activity and screen state to enforce security rules and app locking. All processing is done locally on your device.</string>
+    <string name="device_admin_description">Sentinel device admin enables intrusion detection including failed unlock monitoring and tamper alerts. Required for advanced security features.</string>
+</resources>
