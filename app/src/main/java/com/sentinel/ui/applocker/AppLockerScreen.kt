@@ -14,7 +14,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.sentinel.R
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -83,12 +85,12 @@ class LockOverlayActivity : ComponentActivity() {
                         Icon(Icons.Default.Lock, null, modifier = Modifier.size(64.dp))
                         Spacer(Modifier.height(16.dp))
                         Text(appName, style = MaterialTheme.typography.headlineMedium)
-                        Text("This app is protected by Sentinel", style = MaterialTheme.typography.bodyMedium)
+                        Text(stringResource(R.string.app_protected), style = MaterialTheme.typography.bodyMedium)
                         Spacer(Modifier.height(32.dp))
                         OutlinedTextField(
                             value = "",
                             onValueChange = {},
-                            label = { Text("Enter PIN") },
+                            label = { Text(stringResource(R.string.enter_pin)) },
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
@@ -113,10 +115,10 @@ fun AppLockerScreen(
     }
 
     Scaffold(
-        topBar = { SentinelTopBar("App Locker", onNavigateBack) },
+        topBar = { SentinelTopBar(stringResource(R.string.app_locker), onNavigateBack) },
         floatingActionButton = {
             FloatingActionButton(onClick = viewModel::showAdd) {
-                Icon(Icons.Default.Add, contentDescription = "Add App")
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add))
             }
         }
     ) { padding ->
@@ -126,12 +128,12 @@ fun AppLockerScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Button(onClick = viewModel::lockAll, modifier = Modifier.weight(1f)) {
-                    Text("Lock All Now")
+                    Text(stringResource(R.string.lock_all_now))
                 }
             }
             if (apps.isEmpty()) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("No protected apps. Tap + to add.")
+                    Text(stringResource(R.string.no_locked_apps))
                 }
             } else {
                 LazyColumn(
@@ -177,30 +179,30 @@ private fun AddAppDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Protect Application") },
+        title = { Text(stringResource(R.string.protect_app)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedTextField(
                     value = appName,
                     onValueChange = { appName = it },
-                    label = { Text("App Name") },
+                    label = { Text(stringResource(R.string.app_name_label)) },
                     modifier = Modifier.fillMaxWidth()
                 )
                 OutlinedTextField(
                     value = packageName,
                     onValueChange = { packageName = it },
-                    label = { Text("Package Name") },
+                    label = { Text(stringResource(R.string.package_name)) },
                     modifier = Modifier.fillMaxWidth()
                 )
-                Text("Lock Method: ${method.name}", style = MaterialTheme.typography.bodySmall)
+                Text(stringResource(R.string.lock_method, method.name), style = MaterialTheme.typography.bodySmall)
             }
         },
         confirmButton = {
             TextButton(
                 onClick = { onAdd(packageName, appName, method) },
                 enabled = packageName.isNotBlank() && appName.isNotBlank()
-            ) { Text("Add") }
+            ) { Text(stringResource(R.string.add)) }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) } }
     )
 }

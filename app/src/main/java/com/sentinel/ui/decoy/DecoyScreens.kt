@@ -19,7 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.sentinel.R
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sentinel.domain.model.DecoyCategory
@@ -67,20 +69,20 @@ fun DecoyConfigScreen(
     onNavigateBack: () -> Unit,
     onNavigate: (String) -> Unit
 ) {
-    Scaffold(topBar = { SentinelTopBar("Decoy Mode", onNavigateBack) }) { padding ->
+    Scaffold(topBar = { SentinelTopBar(stringResource(R.string.decoy_mode), onNavigateBack) }) { padding ->
         Column(
             modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                "Configure fake content shown under coercion. The UI appears authentic to observers.",
+                stringResource(R.string.decoy_desc),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             listOf(
-                Triple("Fake Gallery", Icons.Default.Photo, SentinelRoutes.DECOY_GALLERY),
-                Triple("Fake Contacts", Icons.Default.Contacts, SentinelRoutes.DECOY_CONTACTS),
-                Triple("Fake Notes", Icons.Default.Note, SentinelRoutes.DECOY_NOTES)
+                Triple(stringResource(R.string.fake_gallery), Icons.Default.Photo, SentinelRoutes.DECOY_GALLERY),
+                Triple(stringResource(R.string.fake_contacts), Icons.Default.Contacts, SentinelRoutes.DECOY_CONTACTS),
+                Triple(stringResource(R.string.fake_notes), Icons.Default.Note, SentinelRoutes.DECOY_NOTES)
             ).forEach { (title, icon, route) ->
                 SentinelCard(onClick = { onNavigate(route) }) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -100,7 +102,7 @@ fun DecoyGalleryScreen(
     viewModel: DecoyViewModel = hiltViewModel()
 ) {
     val items by viewModel.gallery.collectAsStateWithLifecycle()
-    Scaffold(topBar = { SentinelTopBar("Gallery", onNavigateBack) }) { padding ->
+    Scaffold(topBar = { SentinelTopBar(stringResource(R.string.gallery), onNavigateBack) }) { padding ->
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
             modifier = Modifier.fillMaxSize().padding(padding).padding(8.dp),
@@ -133,7 +135,7 @@ fun DecoyContactsScreen(
     viewModel: DecoyViewModel = hiltViewModel()
 ) {
     val contacts by viewModel.contacts.collectAsStateWithLifecycle()
-    Scaffold(topBar = { SentinelTopBar("Contacts", onNavigateBack) }) { padding ->
+    Scaffold(topBar = { SentinelTopBar(stringResource(R.string.contacts), onNavigateBack) }) { padding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(padding),
             contentPadding = PaddingValues(8.dp),
@@ -162,7 +164,7 @@ fun DecoyNotesScreen(
     viewModel: DecoyViewModel = hiltViewModel()
 ) {
     val notes by viewModel.notes.collectAsStateWithLifecycle()
-    Scaffold(topBar = { SentinelTopBar("Notes", onNavigateBack) }) { padding ->
+    Scaffold(topBar = { SentinelTopBar(stringResource(R.string.notes), onNavigateBack) }) { padding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)

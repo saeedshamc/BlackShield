@@ -10,12 +10,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.sentinel.R
 import com.sentinel.ui.components.SentinelCard
 import com.sentinel.ui.components.SentinelTopBar
 import com.sentinel.ui.components.StatusBadge
+import com.sentinel.ui.util.profileDisplayName
 
 @Composable
 fun ProfileManagerScreen(
@@ -24,14 +27,14 @@ fun ProfileManagerScreen(
 ) {
     val profiles by viewModel.profiles.collectAsStateWithLifecycle()
 
-    Scaffold(topBar = { SentinelTopBar("Emergency Profiles", onNavigateBack) }) { padding ->
+    Scaffold(topBar = { SentinelTopBar(stringResource(R.string.emergency_profiles), onNavigateBack) }) { padding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             item {
                 Text(
-                    "Switch profiles instantly to change your security posture.",
+                    stringResource(R.string.profiles_desc),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(vertical = 8.dp)
@@ -47,7 +50,7 @@ fun ProfileManagerScreen(
                         Column(modifier = Modifier.weight(1f)) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(
-                                    profile.name,
+                                    profileDisplayName(profile),
                                     style = MaterialTheme.typography.titleMedium,
                                     color = runCatching {
                                         Color(android.graphics.Color.parseColor(profile.color))
@@ -57,7 +60,7 @@ fun ProfileManagerScreen(
                                     Spacer(Modifier.width(8.dp))
                                     Icon(
                                         Icons.Default.CheckCircle,
-                                        contentDescription = "Active",
+                                        contentDescription = null,
                                         tint = MaterialTheme.colorScheme.secondary,
                                         modifier = Modifier.size(18.dp)
                                     )
@@ -70,16 +73,22 @@ fun ProfileManagerScreen(
                             )
                             Spacer(Modifier.height(4.dp))
                             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                                StatusBadge("${profile.lockedApps.size} locked", profile.lockedApps.isNotEmpty())
-                                StatusBadge("${profile.hiddenApps.size} hidden", profile.hiddenApps.isNotEmpty())
+                                StatusBadge(
+                                    stringResource(R.string.badge_locked, profile.lockedApps.size),
+                                    profile.lockedApps.isNotEmpty()
+                                )
+                                StatusBadge(
+                                    stringResource(R.string.badge_hidden, profile.hiddenApps.size),
+                                    profile.hiddenApps.isNotEmpty()
+                                )
                                 if (profile.decoySettings.enabled) {
-                                    StatusBadge("DECOY", true)
+                                    StatusBadge(stringResource(R.string.badge_decoy), true)
                                 }
                             }
                         }
                         if (!profile.isActive) {
                             OutlinedButton(onClick = { viewModel.activate(profile.id) }) {
-                                Text("Activate")
+                                Text(stringResource(R.string.activate))
                             }
                         }
                     }

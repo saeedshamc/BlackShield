@@ -1,23 +1,39 @@
 package com.sentinel.ui.settings
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sentinel.data.local.datastore.PreferencesDataStore
 import com.sentinel.data.repository.PasswordRepository
+import com.sentinel.domain.model.AppLanguage
 import com.sentinel.domain.model.ThemeMode
 import com.sentinel.domain.usecase.backup.ExportBackupUseCase
 import com.sentinel.domain.usecase.backup.ImportBackupUseCase
+import com.sentinel.util.LocaleManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    preferencesDataStore: PreferencesDataStore
+    private val preferencesDataStore: PreferencesDataStore,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
     val themeMode: StateFlow<ThemeMode> = preferencesDataStore.themeMode
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ThemeMode.DARK)
+
+    val appLanguage: StateFlow<AppLanguage> = preferencesDataStore.appLanguage
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), LocaleManager.currentLanguage(context))
+
+    fun setLanguage(language: AppLanguage, onApplied: () -> Unit) {
+        viewModelScope.launch {
+            preferencesDataStore.setAppLanguage(language)
+            LocaleManager.persist(context, language)
+            onApplied()
+        }
+    }
 }
 
 @HiltViewModel
@@ -25,25 +41,31 @@ class DuressPasswordViewModel @Inject constructor(
     private val passwordRepository: PasswordRepository
 ) : ViewModel() {
 
-    private val _message = MutableStateFlow<String?>(null)
-    val message: StateFlow<String?> = _message.asStateFlow()
+    private val _messageKey = MutableStateFlow<String?>(null)
+    val messageKey: StateFlow<String?> = _messageKey.asStateFlow()
+    private val _messageArg = MutableStateFlow<Int?>(null)
+    val messageArg: StateFlow<Int?> = _messageArg.asStateFlow()
 
     fun setMainPassword(password: String) {
         if (password.length < 4) {
-            _message.value = "Password must be at least 4 characters"
+            _messageKey.value = "password_too_short"
+            _messageArg.value = null
             return
         }
         passwordRepository.setMainPassword(password)
-        _message.value = "Main password saved"
+        _messageKey.value = "main_password_saved"
+        _messageArg.value = null
     }
 
     fun setDuressPassword(index: Int, password: String) {
         if (password.length < 4) {
-            _message.value = "Password must be at least 4 characters"
+            _messageKey.value = "password_too_short"
+            _messageArg.value = null
             return
         }
         passwordRepository.setDuressPassword(index, password)
-        _message.value = "Duress password $index saved"
+        _messageKey.value = "duress_password_saved"
+        _messageArg.value = index
     }
 }
 
@@ -53,27 +75,44 @@ class BackupViewModel @Inject constructor(
     private val importBackup: ImportBackupUseCase
 ) : ViewModel() {
 
-    private val _exportResult = MutableStateFlow<String?>(null)
-    val exportResult: StateFlow<String?> = _exportResult.asStateFlow()
+    private val _exportKey = MutableStateFlow<String?>(null)
+    val exportKey: StateFlow<String?> = _exportKey.asStateFlow()
+    private val _exportArg = MutableStateFlow<String?>(null)
+    val exportArg: StateFlow<String?> = _exportArg.asStateFlow()
 
-    private val _importResult = MutableStateFlow<String?>(null)
-    val importResult: StateFlow<String?> = _importResult.asStateFlow()
+    private val _importKey = MutableStateFlow<String?>(null)
+    val importKey: StateFlow<String?> = _importKey.asStateFlow()
+    private val _importArg1 = MutableStateFlow<Int?>(null)
+    val importArg1: StateFlow<Int?> = _importArg1.asStateFlow()
+    private val _importArg2 = MutableStateFlow<Int?>(null)
+    val importArg2: StateFlow<Int?> = _importArg2.asStateFlow()
+    private val _importError = MutableStateFlow<String?>(null)
+    val importError: StateFlow<String?> = _importError.asStateFlow()
 
     fun export() = viewModelScope.launch {
-        runCatching {
-            exportBackup()
-        }.onSuccess {
-            _exportResult.value = "Backup exported (${it.length} encrypted chars)"
-        }.onFailure {
-            _exportResult.value = "Export failed: ${it.message}"
-        }
+        runCatching { exportBackup() }
+            .onSuccess {
+                _exportKey.value = "export_success"
+                _exportArg.value = it.length.toString()
+            }
+            .onFailure {
+                _exportKey.value = "export_failed"
+                _exportArg.value = it.message
+            }
     }
 
     fun import(payload: String) = viewModelScope.launch {
-        importBackup(payload).onSuccess {
-            _importResult.value = "Backup imported: ${it.profiles.size} profiles, ${it.rules.size} rules"
-        }.onFailure {
-            _importResult.value = "Import failed: ${it.message}"
-        }
+        importBackup(payload)
+            .onSuccess {
+                _importKey.value = "import_success"
+                _importArg1.value = it.profiles.size
+                _importArg2.value = it.rules.size
+            }
+            .onFailure {
+                _importKey.value = "import_failed"
+                _importArg1.value = null
+                _importArg2.value = null
+                _importError.value = it.message
+            }
     }
 }

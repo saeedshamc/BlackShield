@@ -62,6 +62,10 @@ Install on a device or emulator (API 30+):
 ./gradlew installDebug
 ```
 
+## Language
+
+Go to **Settings → Language** to switch between **English** and **فارسی (Persian)**. The app restarts automatically after changing language.
+
 ## First Launch Setup
 
 1. **Set passwords** — Settings → Duress Passwords

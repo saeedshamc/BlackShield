@@ -10,9 +10,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.sentinel.R
 import com.sentinel.ui.components.SentinelCard
 import com.sentinel.ui.components.SentinelTopBar
 
@@ -26,10 +28,10 @@ fun RuleListScreen(
     val rules by viewModel.rules.collectAsStateWithLifecycle()
 
     Scaffold(
-        topBar = { SentinelTopBar("Automation Rules", onNavigateBack) },
+        topBar = { SentinelTopBar(stringResource(R.string.automation_rules), onNavigateBack) },
         floatingActionButton = {
             FloatingActionButton(onClick = onCreateRule) {
-                Icon(Icons.Default.Add, contentDescription = "Create Rule")
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add))
             }
         }
     ) { padding ->
@@ -38,7 +40,7 @@ fun RuleListScreen(
                 modifier = Modifier.fillMaxSize().padding(padding),
                 contentAlignment = Alignment.Center
             ) {
-                Text("No rules configured. Tap + to create one.")
+                Text(stringResource(R.string.no_rules))
             }
         } else {
             LazyColumn(
@@ -55,7 +57,11 @@ fun RuleListScreen(
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(rule.name, style = MaterialTheme.typography.titleMedium)
                                 Text(
-                                    "IF ${rule.trigger.type.name} → ${rule.actions.firstOrNull()?.type?.name ?: "NONE"}",
+                                    stringResource(
+                                        R.string.rule_format,
+                                        rule.trigger.type.name,
+                                        rule.actions.firstOrNull()?.type?.name ?: "NONE"
+                                    ),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -65,7 +71,7 @@ fun RuleListScreen(
                                 onCheckedChange = { viewModel.toggleRule(rule.id, it) }
                             )
                             IconButton(onClick = { viewModel.deleteRule(rule.id) }) {
-                                Icon(Icons.Default.Delete, contentDescription = "Delete")
+                                Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.cancel))
                             }
                         }
                     }
@@ -88,8 +94,10 @@ fun RuleBuilderScreen(
 
     LaunchedEffect(ruleId) { viewModel.loadRule(ruleId) }
 
+    val title = if (ruleId != null) stringResource(R.string.edit_rule) else stringResource(R.string.new_rule)
+
     Scaffold(
-        topBar = { SentinelTopBar(if (ruleId != null) "Edit Rule" else "New Rule", onNavigateBack) }
+        topBar = { SentinelTopBar(title, onNavigateBack) }
     ) { padding ->
         Column(
             modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp),
@@ -98,18 +106,18 @@ fun RuleBuilderScreen(
             OutlinedTextField(
                 value = state.name,
                 onValueChange = viewModel::updateName,
-                label = { Text("Rule Name") },
+                label = { Text(stringResource(R.string.rule_name)) },
                 modifier = Modifier.fillMaxWidth()
             )
             OutlinedTextField(
                 value = state.description,
                 onValueChange = viewModel::updateDescription,
-                label = { Text("Description") },
+                label = { Text(stringResource(R.string.description)) },
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 2
             )
 
-            Text("Trigger (IF)", style = MaterialTheme.typography.titleSmall)
+            Text(stringResource(R.string.trigger_if), style = MaterialTheme.typography.titleSmall)
             ExposedDropdownMenuBox(expanded = triggerExpanded, onExpandedChange = { triggerExpanded = it }) {
                 OutlinedTextField(
                     value = state.triggerType.name,
@@ -132,12 +140,12 @@ fun RuleBuilderScreen(
                 OutlinedTextField(
                     value = state.triggerThreshold.toString(),
                     onValueChange = { viewModel.updateThreshold(it.toIntOrNull() ?: 5) },
-                    label = { Text("Threshold / Count") },
+                    label = { Text(stringResource(R.string.threshold_count)) },
                     modifier = Modifier.fillMaxWidth()
                 )
             }
 
-            Text("Action (THEN)", style = MaterialTheme.typography.titleSmall)
+            Text(stringResource(R.string.action_then), style = MaterialTheme.typography.titleSmall)
             ExposedDropdownMenuBox(expanded = actionExpanded, onExpandedChange = { actionExpanded = it }) {
                 OutlinedTextField(
                     value = state.actionType.name,
@@ -163,7 +171,7 @@ fun RuleBuilderScreen(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = state.name.isNotBlank()
             ) {
-                Text("Save Rule")
+                Text(stringResource(R.string.save_rule))
             }
         }
     }

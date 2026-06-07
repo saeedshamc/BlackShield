@@ -6,9 +6,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.sentinel.R
 import com.sentinel.domain.model.EventSeverity
 import com.sentinel.ui.components.SentinelCard
 import com.sentinel.ui.components.SentinelTopBar
@@ -24,7 +26,7 @@ fun EventLogScreen(
     val events by viewModel.events.collectAsStateWithLifecycle()
     var query by remember { mutableStateOf("") }
 
-    Scaffold(topBar = { SentinelTopBar("Security Event Log", onNavigateBack) }) { padding ->
+    Scaffold(topBar = { SentinelTopBar(stringResource(R.string.event_log), onNavigateBack) }) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding)) {
             OutlinedTextField(
                 value = query,
@@ -32,7 +34,7 @@ fun EventLogScreen(
                     query = it
                     viewModel.updateSearch(it)
                 },
-                label = { Text("Search events...") },
+                label = { Text(stringResource(R.string.search_events)) },
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
                 singleLine = true
             )
@@ -51,7 +53,7 @@ fun EventLogScreen(
                                 Text(event.eventType.name, style = MaterialTheme.typography.titleSmall)
                                 if (event.ruleName != null) {
                                     Text(
-                                        "Rule: ${event.ruleName}",
+                                        stringResource(R.string.rule_label, event.ruleName),
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.primary
                                     )
@@ -62,7 +64,7 @@ fun EventLogScreen(
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                                 Text(
-                                    "Source: ${event.triggerSource.name}",
+                                    stringResource(R.string.source_label, event.triggerSource.name),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -73,12 +75,10 @@ fun EventLogScreen(
                                     style = MaterialTheme.typography.labelSmall
                                 )
                                 Spacer(Modifier.height(4.dp))
-                                val severityColor = when (event.severity) {
-                                    EventSeverity.CRITICAL -> SentinelColors.CyberRed
-                                    EventSeverity.WARNING -> SentinelColors.CyberOrange
-                                    EventSeverity.INFO -> SentinelColors.CyberGreen
-                                }
-                                StatusBadge(event.severity.name, event.severity != EventSeverity.CRITICAL)
+                                StatusBadge(
+                                    event.severity.name,
+                                    event.severity != EventSeverity.CRITICAL
+                                )
                             }
                         }
                     }

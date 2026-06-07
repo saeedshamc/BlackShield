@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">سنتینل</string>
+    <string name="panic_tile_label">پانیک سنتینل</string>
+    <string name="accessibility_service_description">سنتینل فعالیت برنامه‌ها و وضعیت صفحه را برای اجرای قوانین امنیتی و قفل برنامه‌ها پایش می‌کند. تمام پردازش‌ها به‌صورت محلی روی دستگاه شما انجام می‌شود.</string>
+    <string name="device_admin_description">مدیر دستگاه سنتینل تشخیص نفوذ از جمله پایش شکست باز کردن قفل و هشدار دستکاری را فعال می‌کند. برای قابلیت‌های پیشرفته امنیتی لازم است.</string>
+
+    <!-- Common -->
+    <string name="back">بازگشت</string>
+    <string name="cancel">لغو</string>
+    <string name="add">افزودن</string>
+    <string name="save">ذخیره</string>
+    <string name="none">هیچ‌کدام</string>
+    <string name="activate">فعال‌سازی</string>
+    <string name="settings">تنظیمات</string>
+    <string name="cd_settings">تنظیمات</string>
+    <string name="cd_panic">پانیک</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">سنتینل</string>
+    <string name="dashboard_subtitle">داشبورد امنیتی</string>
+    <string name="active_profile">پروفایل فعال</string>
+    <string name="security_score">امتیاز امنیتی</string>
+    <string name="active_rules">قوانین فعال</string>
+    <string name="locked_apps">برنامه‌های قفل‌شده</string>
+    <string name="emergency_actions">اقدامات اضطراری</string>
+    <string name="emergency_actions_desc">مرکز پانیک — اقدامات دفاعی سریع</string>
+    <string name="decoy_mode_active">حالت فریب فعال است</string>
+    <string name="manage_decoy">مدیریت محیط فریب</string>
+    <string name="quick_access">دسترسی سریع</string>
+    <string name="recent_events">رویدادهای اخیر</string>
+    <string name="no_events">هنوز رویداد امنیتی ثبت نشده است.</string>
+    <string name="nav_rules">قوانین</string>
+    <string name="nav_profiles">پروفایل‌ها</string>
+    <string name="nav_decoy">فریب</string>
+    <string name="nav_events">رویدادها</string>
+
+    <!-- Profiles -->
+    <string name="emergency_profiles">پروفایل‌های اضطراری</string>
+    <string name="profiles_desc">با تعویض فوری پروفایل، وضعیت امنیتی خود را تغییر دهید.</string>
+    <string name="badge_locked">%1$d قفل</string>
+    <string name="badge_hidden">%1$d مخفی</string>
+    <string name="badge_decoy">فریب</string>
+    <string name="profile_normal">حالت عادی</string>
+    <string name="profile_travel">حالت سفر</string>
+    <string name="profile_border">حالت عبور از مرز</string>
+    <string name="profile_emergency">حالت اضطراری</string>
+
+    <!-- Rules -->
+    <string name="automation_rules">قوانین خودکارسازی</string>
+    <string name="no_rules">قانونی تنظیم نشده. برای ساخت، + را بزنید.</string>
+    <string name="edit_rule">ویرایش قانون</string>
+    <string name="new_rule">قانون جدید</string>
+    <string name="rule_name">نام قانون</string>
+    <string name="description">توضیحات</string>
+    <string name="trigger_if">محرک (اگر)</string>
+    <string name="action_then">اقدام (آنگاه)</string>
+    <string name="threshold_count">آستانه / تعداد</string>
+    <string name="save_rule">ذخیره قانون</string>
+    <string name="rule_format">اگر %1$s ← %2$s</string>
+
+    <!-- Decoy -->
+    <string name="decoy_mode">حالت فریب</string>
+    <string name="decoy_desc">محتوای جعلی برای نمایش در شرایط اجبار را تنظیم کنید. رابط کاربری برای دیگران واقعی به نظر می‌رسد.</string>
+    <string name="fake_gallery">گالری جعلی</string>
+    <string name="fake_contacts">مخاطبین جعلی</string>
+    <string name="fake_notes">یادداشت‌های جعلی</string>
+    <string name="gallery">گالری</string>
+    <string name="contacts">مخاطبین</string>
+    <string name="notes">یادداشت‌ها</string>
+
+    <!-- App Locker -->
+    <string name="app_locker">قفل برنامه</string>
+    <string name="lock_all_now">قفل همه الان</string>
+    <string name="no_locked_apps">برنامه محافظت‌شده‌ای نیست. برای افزودن + را بزنید.</string>
+    <string name="protect_app">محافظت از برنامه</string>
+    <string name="app_name_label">نام برنامه</string>
+    <string name="package_name">نام پکیج</string>
+    <string name="lock_method">روش قفل: %1$s</string>
+    <string name="app_protected">این برنامه توسط سنتینل محافظت می‌شود</string>
+    <string name="enter_pin">وارد کردن PIN</string>
+
+    <!-- Panic -->
+    <string name="panic_center">مرکز کنترل پانیک</string>
+    <string name="panic_desc">اقدامات دفاعی فوری. از طریق کاشی تنظیمات سریع و محرک‌های سخت‌افزاری هم در دسترس است.</string>
+    <string name="full_panic">توالی کامل پانیک</string>
+    <string name="individual_actions">اقدامات جداگانه</string>
+    <string name="panic_emergency_profile">فعال‌سازی پروفایل اضطراری</string>
+    <string name="panic_lock_apps">قفل همه برنامه‌ها</string>
+    <string name="panic_decoy">فعال‌سازی حالت فریب</string>
+    <string name="panic_notifications">قطع اعلان‌ها</string>
+    <string name="activation_methods">روش‌های فعال‌سازی</string>
+    <string name="method_qs_tile">کاشی تنظیمات سریع</string>
+    <string name="method_floating">دکمه شناور پانیک</string>
+    <string name="method_power_x5">دکمه پاور ×۵</string>
+    <string name="method_power_volume">پاور + ولوم بالا</string>
+    <string name="method_gesture">ژست مخفی</string>
+    <string name="last_action">آخرین اقدام: %1$s</string>
+    <string name="action_emergency_profile">پروفایل اضطراری فعال شد</string>
+    <string name="action_lock_apps">همه برنامه‌ها قفل شدند</string>
+    <string name="action_decoy">حالت فریب فعال شد</string>
+    <string name="action_notifications">اعلان‌ها قطع شدند</string>
+    <string name="action_full_panic">توالی کامل پانیک اجرا شد</string>
+
+    <!-- Events -->
+    <string name="event_log">گزارش رویدادهای امنیتی</string>
+    <string name="search_events">جستجوی رویدادها…</string>
+    <string name="rule_label">قانون: %1$s</string>
+    <string name="source_label">منبع: %1$s</string>
+
+    <!-- Settings -->
+    <string name="section_security">امنیت</string>
+    <string name="duress_passwords">رمزهای اجبار</string>
+    <string name="backup_restore">پشتیبان‌گیری و بازیابی</string>
+    <string name="section_permissions">مجوزها</string>
+    <string name="perm_accessibility">سرویس دسترسی‌پذیری را برای پایش و خودکارسازی برنامه‌ها فعال کنید.</string>
+    <string name="perm_device_admin">مدیر دستگاه را برای تشخیص نفوذ فعال کنید.</string>
+    <string name="section_language">زبان</string>
+    <string name="language_desc">زبان نمایش برنامه را انتخاب کنید.</string>
+    <string name="language_english">English</string>
+    <string name="language_persian">فارسی</string>
+    <string name="section_about">درباره</string>
+    <string name="about_version">سنتینل نسخه ۱.۰.۰</string>
+    <string name="about_desc">پلتفرم خودکارسازی امنیتی شخصی و آفلاین.</string>
+
+    <!-- Duress -->
+    <string name="duress_desc">چند رمز تنظیم کنید. رمزهای اجبار به‌صورت مخفیانه اقدامات دفاعی را اجرا می‌کنند.</string>
+    <string name="main_password">رمز اصلی (باز کردن عادی)</string>
+    <string name="save_main_password">ذخیره رمز اصلی</string>
+    <string name="duress_1">اجبار ۱ ← حالت فریب</string>
+    <string name="duress_2">اجبار ۲ ← قفل برنامه‌ها</string>
+    <string name="duress_3">اجبار ۳ ← اقدامات اضطراری</string>
+    <string name="save_duress_password">ذخیره رمز اجبار %1$d</string>
+    <string name="password_too_short">رمز باید حداقل ۴ کاراکتر باشد</string>
+    <string name="main_password_saved">رمز اصلی ذخیره شد</string>
+    <string name="duress_password_saved">رمز اجبار %1$d ذخیره شد</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">تنظیمات رمزنگاری‌شده را صادر یا وارد کنید. همه داده‌ها روی دستگاه می‌مانند.</string>
+    <string name="export_backup">صدور پشتیبان رمزنگاری‌شده</string>
+    <string name="paste_backup">محتوای پشتیبان را بچسبانید</string>
+    <string name="import_backup">وارد کردن پشتیبان</string>
+    <string name="export_success">پشتیبان صادر شد (%1$d کاراکتر رمزنگاری‌شده)</string>
+    <string name="export_failed">صدور ناموفق: %1$s</string>
+    <string name="import_success">پشتیبان وارد شد: %1$d پروفایل، %2$d قانون</string>
+    <string name="import_failed">ورود ناموفق: %1$s</string>
+</resources>

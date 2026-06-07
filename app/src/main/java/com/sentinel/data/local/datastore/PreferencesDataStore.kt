@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
+import com.sentinel.domain.model.AppLanguage
 import com.sentinel.domain.model.ThemeMode
 import com.sentinel.util.Constants
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -32,6 +33,7 @@ class PreferencesDataStore @Inject constructor(
         val AUTO_BACKUP = booleanPreferencesKey("auto_backup_enabled")
         val LOG_RETENTION_DAYS = intPreferencesKey("log_retention_days")
         val FAILED_UNLOCK_COUNT = intPreferencesKey("failed_unlock_count")
+        val APP_LANGUAGE = stringPreferencesKey(Constants.KEY_APP_LANGUAGE)
     }
 
     val activeProfileId: Flow<Long> = context.dataStore.data.map {
@@ -55,6 +57,10 @@ class PreferencesDataStore @Inject constructor(
         it[Keys.FAILED_UNLOCK_COUNT] ?: 0
     }
 
+    val appLanguage: Flow<AppLanguage> = context.dataStore.data.map {
+        AppLanguage.fromCode(it[Keys.APP_LANGUAGE])
+    }
+
     suspend fun setActiveProfileId(id: Long) = edit { it[Keys.ACTIVE_PROFILE_ID] = id }
     suspend fun setDecoyModeActive(active: Boolean) = edit { it[Keys.DECOY_MODE_ACTIVE] = active }
     suspend fun setThemeMode(mode: ThemeMode) = edit { it[Keys.THEME_MODE] = mode.name }
@@ -65,6 +71,7 @@ class PreferencesDataStore @Inject constructor(
         it[Keys.FAILED_UNLOCK_COUNT] = (it[Keys.FAILED_UNLOCK_COUNT] ?: 0) + 1
     }
     suspend fun resetFailedUnlockCount() = edit { it[Keys.FAILED_UNLOCK_COUNT] = 0 }
+    suspend fun setAppLanguage(language: AppLanguage) = edit { it[Keys.APP_LANGUAGE] = language.code }
 
     private suspend fun edit(transform: suspend (MutablePreferences) -> Unit) {
         context.dataStore.edit { transform(it) }

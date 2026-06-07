@@ -8,12 +8,15 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.sentinel.R
 import com.sentinel.navigation.SentinelRoutes
 import com.sentinel.ui.components.*
 import com.sentinel.ui.theme.SentinelColors
+import com.sentinel.ui.util.profileDisplayName
 import com.sentinel.util.toFormattedTimestamp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,13 +32,13 @@ fun DashboardScreen(
             TopAppBar(
                 title = {
                     Column {
-                        Text("SENTINEL", style = MaterialTheme.typography.labelLarge)
-                        Text("Security Dashboard", style = MaterialTheme.typography.titleLarge)
+                        Text(stringResource(R.string.dashboard_title), style = MaterialTheme.typography.labelLarge)
+                        Text(stringResource(R.string.dashboard_subtitle), style = MaterialTheme.typography.titleLarge)
                     }
                 },
                 actions = {
                     IconButton(onClick = { onNavigate(SentinelRoutes.SETTINGS) }) {
-                        Icon(Icons.Default.Settings, contentDescription = "Settings")
+                        Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.cd_settings))
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -48,7 +51,7 @@ fun DashboardScreen(
                 onClick = { onNavigate(SentinelRoutes.PANIC) },
                 containerColor = SentinelColors.CyberRed
             ) {
-                Icon(Icons.Default.Emergency, contentDescription = "Panic", tint = MaterialTheme.colorScheme.onError)
+                Icon(Icons.Default.Emergency, contentDescription = stringResource(R.string.cd_panic), tint = MaterialTheme.colorScheme.onError)
             }
         }
     ) { padding ->
@@ -64,15 +67,16 @@ fun DashboardScreen(
             item {
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     DashboardCard(
-                        title = "Active Profile",
-                        value = state.activeProfile?.name ?: "None",
+                        title = stringResource(R.string.active_profile),
+                        value = state.activeProfile?.let { profileDisplayName(it) }
+                            ?: stringResource(R.string.none),
                         icon = Icons.Default.Shield,
                         accentColor = SentinelColors.CyberCyan,
                         modifier = Modifier.weight(1f),
                         onClick = { onNavigate(SentinelRoutes.PROFILES) }
                     )
                     DashboardCard(
-                        title = "Security Score",
+                        title = stringResource(R.string.security_score),
                         value = "${state.securityStatus.overallScore}%",
                         icon = Icons.Default.Security,
                         accentColor = SentinelColors.CyberGreen,
@@ -84,7 +88,7 @@ fun DashboardScreen(
             item {
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     DashboardCard(
-                        title = "Active Rules",
+                        title = stringResource(R.string.active_rules),
                         value = state.activeRulesCount.toString(),
                         icon = Icons.Default.Rule,
                         accentColor = SentinelColors.CyberPurple,
@@ -92,7 +96,7 @@ fun DashboardScreen(
                         onClick = { onNavigate(SentinelRoutes.RULES) }
                     )
                     DashboardCard(
-                        title = "Locked Apps",
+                        title = stringResource(R.string.locked_apps),
                         value = state.lockedAppsCount.toString(),
                         icon = Icons.Default.Lock,
                         accentColor = SentinelColors.CyberOrange,
@@ -108,9 +112,9 @@ fun DashboardScreen(
                         Icon(Icons.Default.Warning, null, tint = SentinelColors.CyberRed)
                         Spacer(Modifier.width(12.dp))
                         Column {
-                            Text("Emergency Actions", style = MaterialTheme.typography.titleMedium)
+                            Text(stringResource(R.string.emergency_actions), style = MaterialTheme.typography.titleMedium)
                             Text(
-                                "Panic center — quick defensive actions",
+                                stringResource(R.string.emergency_actions_desc),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -123,25 +127,25 @@ fun DashboardScreen(
                 item {
                     SentinelCard {
                         Row {
-                            StatusBadge(label = "DECOY MODE ACTIVE", active = true)
+                            StatusBadge(stringResource(R.string.decoy_mode_active), active = true)
                         }
                         Spacer(Modifier.height(8.dp))
                         TextButton(onClick = { onNavigate(SentinelRoutes.DECOY) }) {
-                            Text("Manage Decoy Environment")
+                            Text(stringResource(R.string.manage_decoy))
                         }
                     }
                 }
             }
 
-            item { SectionHeader("Quick Access") }
+            item { SectionHeader(stringResource(R.string.quick_access)) }
 
             item {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     listOf(
-                        Triple("Rules", Icons.Default.Rule, SentinelRoutes.RULES),
-                        Triple("Profiles", Icons.Default.Person, SentinelRoutes.PROFILES),
-                        Triple("Decoy", Icons.Default.VisibilityOff, SentinelRoutes.DECOY),
-                        Triple("Events", Icons.Default.History, SentinelRoutes.EVENTS)
+                        Triple(stringResource(R.string.nav_rules), Icons.Default.Rule, SentinelRoutes.RULES),
+                        Triple(stringResource(R.string.nav_profiles), Icons.Default.Person, SentinelRoutes.PROFILES),
+                        Triple(stringResource(R.string.nav_decoy), Icons.Default.VisibilityOff, SentinelRoutes.DECOY),
+                        Triple(stringResource(R.string.nav_events), Icons.Default.History, SentinelRoutes.EVENTS)
                     ).forEach { (label, icon, route) ->
                         OutlinedButton(
                             onClick = { onNavigate(route) },
@@ -157,12 +161,12 @@ fun DashboardScreen(
                 }
             }
 
-            item { SectionHeader("Recent Events") }
+            item { SectionHeader(stringResource(R.string.recent_events)) }
 
             if (state.recentEvents.isEmpty()) {
                 item {
                     Text(
-                        "No security events recorded yet.",
+                        stringResource(R.string.no_events),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

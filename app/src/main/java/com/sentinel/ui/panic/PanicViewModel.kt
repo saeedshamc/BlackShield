@@ -16,37 +16,37 @@ class PanicCenterViewModel @Inject constructor(
     private val triggerPanic: TriggerPanicUseCase
 ) : ViewModel() {
 
-    private val _lastAction = MutableStateFlow<String?>(null)
-    val lastAction: StateFlow<String?> = _lastAction.asStateFlow()
+    private val _lastActionKey = MutableStateFlow<String?>(null)
+    val lastActionKey: StateFlow<String?> = _lastActionKey.asStateFlow()
 
     val config = PanicConfig()
 
     fun executeEmergencyProfile() = execute(
         listOf(SecurityAction(ActionType.ACTIVATE_PROFILE, mapOf("profileType" to "EMERGENCY"))),
-        "Emergency profile activated"
+        "action_emergency_profile"
     )
 
     fun lockAllApps() = execute(
         listOf(SecurityAction(ActionType.LOCK_APPLICATIONS)),
-        "All apps locked"
+        "action_lock_apps"
     )
 
     fun activateDecoy() = execute(
         listOf(SecurityAction(ActionType.ACTIVATE_DECOY_MODE)),
-        "Decoy mode activated"
+        "action_decoy"
     )
 
     fun suppressNotifications() = execute(
         listOf(SecurityAction(ActionType.DISABLE_NOTIFICATIONS)),
-        "Notifications suppressed"
+        "action_notifications"
     )
 
-    fun fullPanic() = execute(config.defaultActions, "Full panic sequence executed")
+    fun fullPanic() = execute(config.defaultActions, "action_full_panic")
 
-    private fun execute(actions: List<SecurityAction>, message: String) {
+    private fun execute(actions: List<SecurityAction>, messageKey: String) {
         viewModelScope.launch {
             triggerPanic(actions, EventSource.MANUAL)
-            _lastAction.value = message
+            _lastActionKey.value = messageKey
         }
     }
 }

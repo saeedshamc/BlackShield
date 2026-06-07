@@ -14,6 +14,7 @@ object Constants {
     const val KEY_DURESS_PASSWORD_2_HASH = "duress_password_2_hash"
     const val KEY_DURESS_PASSWORD_3_HASH = "duress_password_3_hash"
     const val KEY_THEME_MODE = "theme_mode"
+    const val KEY_APP_LANGUAGE = "app_language"
     const val KEY_PANIC_FLOATING_ENABLED = "panic_floating_enabled"
     const val KEY_APP_LOCK_TIMEOUT = "app_lock_timeout_ms"
     const val KEY_NOTIFICATIONS_SUPPRESSED = "notifications_suppressed"

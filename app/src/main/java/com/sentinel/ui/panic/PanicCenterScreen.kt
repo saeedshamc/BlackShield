@@ -5,11 +5,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.sentinel.R
 import com.sentinel.ui.components.SectionHeader
 import com.sentinel.ui.components.SentinelCard
 import com.sentinel.ui.components.SentinelTopBar
@@ -20,15 +21,15 @@ fun PanicCenterScreen(
     onNavigateBack: () -> Unit,
     viewModel: PanicCenterViewModel = hiltViewModel()
 ) {
-    val lastAction by viewModel.lastAction.collectAsStateWithLifecycle()
+    val lastActionKey by viewModel.lastActionKey.collectAsStateWithLifecycle()
 
-    Scaffold(topBar = { SentinelTopBar("Panic Control Center", onNavigateBack) }) { padding ->
+    Scaffold(topBar = { SentinelTopBar(stringResource(R.string.panic_center), onNavigateBack) }) { padding ->
         Column(
             modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                "Instant defensive actions. Also accessible via Quick Settings tile and hardware triggers.",
+                stringResource(R.string.panic_desc),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -40,32 +41,40 @@ fun PanicCenterScreen(
             ) {
                 Icon(Icons.Default.Emergency, null)
                 Spacer(Modifier.width(8.dp))
-                Text("FULL PANIC SEQUENCE")
+                Text(stringResource(R.string.full_panic))
             }
 
-            SectionHeader("Individual Actions")
+            SectionHeader(stringResource(R.string.individual_actions))
 
-            PanicActionButton("Activate Emergency Profile", Icons.Default.Shield, viewModel::executeEmergencyProfile)
-            PanicActionButton("Lock All Apps", Icons.Default.Lock, viewModel::lockAllApps)
-            PanicActionButton("Enable Decoy Mode", Icons.Default.VisibilityOff, viewModel::activateDecoy)
-            PanicActionButton("Suppress Notifications", Icons.Default.NotificationsOff, viewModel::suppressNotifications)
+            PanicActionButton(stringResource(R.string.panic_emergency_profile), Icons.Default.Shield, viewModel::executeEmergencyProfile)
+            PanicActionButton(stringResource(R.string.panic_lock_apps), Icons.Default.Lock, viewModel::lockAllApps)
+            PanicActionButton(stringResource(R.string.panic_decoy), Icons.Default.VisibilityOff, viewModel::activateDecoy)
+            PanicActionButton(stringResource(R.string.panic_notifications), Icons.Default.NotificationsOff, viewModel::suppressNotifications)
 
-            SectionHeader("Activation Methods")
+            SectionHeader(stringResource(R.string.activation_methods))
             SentinelCard {
                 listOf(
-                    "Quick Settings Tile",
-                    "Floating Panic Button",
-                    "Power Button ×5",
-                    "Power + Volume Up",
-                    "Secret Gesture"
+                    stringResource(R.string.method_qs_tile),
+                    stringResource(R.string.method_floating),
+                    stringResource(R.string.method_power_x5),
+                    stringResource(R.string.method_power_volume),
+                    stringResource(R.string.method_gesture)
                 ).forEach { method ->
                     Text("• $method", style = MaterialTheme.typography.bodySmall)
                 }
             }
 
-            lastAction?.let { action ->
+            lastActionKey?.let { key ->
+                val message = when (key) {
+                    "action_emergency_profile" -> stringResource(R.string.action_emergency_profile)
+                    "action_lock_apps" -> stringResource(R.string.action_lock_apps)
+                    "action_decoy" -> stringResource(R.string.action_decoy)
+                    "action_notifications" -> stringResource(R.string.action_notifications)
+                    "action_full_panic" -> stringResource(R.string.action_full_panic)
+                    else -> key
+                }
                 SentinelCard {
-                    Text("Last action: $action", color = SentinelColors.CyberGreen)
+                    Text(stringResource(R.string.last_action, message), color = SentinelColors.CyberGreen)
                 }
             }
         }

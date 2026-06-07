@@ -5,6 +5,7 @@ import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.sentinel.domain.usecase.decoy.EnsureDecoyDefaultsUseCase
 import com.sentinel.domain.usecase.profile.EnsureDefaultProfilesUseCase
+import com.sentinel.util.LocaleManager
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -25,6 +26,7 @@ class SentinelApplication : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
+        LocaleManager.restore(this)
         applicationScope.launch {
             ensureDefaultProfiles()
             ensureDecoyDefaults()

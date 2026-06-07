@@ -4,4 +4,144 @@
     <string name="panic_tile_label">Sentinel Panic</string>
     <string name="accessibility_service_description">Sentinel monitors app activity and screen state to enforce security rules and app locking. All processing is done locally on your device.</string>
     <string name="device_admin_description">Sentinel device admin enables intrusion detection including failed unlock monitoring and tamper alerts. Required for advanced security features.</string>
+
+    <!-- Common -->
+    <string name="back">Back</string>
+    <string name="cancel">Cancel</string>
+    <string name="add">Add</string>
+    <string name="save">Save</string>
+    <string name="none">None</string>
+    <string name="activate">Activate</string>
+    <string name="settings">Settings</string>
+    <string name="cd_settings">Settings</string>
+    <string name="cd_panic">Panic</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">SENTINEL</string>
+    <string name="dashboard_subtitle">Security Dashboard</string>
+    <string name="active_profile">Active Profile</string>
+    <string name="security_score">Security Score</string>
+    <string name="active_rules">Active Rules</string>
+    <string name="locked_apps">Locked Apps</string>
+    <string name="emergency_actions">Emergency Actions</string>
+    <string name="emergency_actions_desc">Panic center — quick defensive actions</string>
+    <string name="decoy_mode_active">DECOY MODE ACTIVE</string>
+    <string name="manage_decoy">Manage Decoy Environment</string>
+    <string name="quick_access">Quick Access</string>
+    <string name="recent_events">Recent Events</string>
+    <string name="no_events">No security events recorded yet.</string>
+    <string name="nav_rules">Rules</string>
+    <string name="nav_profiles">Profiles</string>
+    <string name="nav_decoy">Decoy</string>
+    <string name="nav_events">Events</string>
+
+    <!-- Profiles -->
+    <string name="emergency_profiles">Emergency Profiles</string>
+    <string name="profiles_desc">Switch profiles instantly to change your security posture.</string>
+    <string name="badge_locked">%1$d locked</string>
+    <string name="badge_hidden">%1$d hidden</string>
+    <string name="badge_decoy">DECOY</string>
+    <string name="profile_normal">Normal Mode</string>
+    <string name="profile_travel">Travel Mode</string>
+    <string name="profile_border">Border Crossing Mode</string>
+    <string name="profile_emergency">Emergency Mode</string>
+
+    <!-- Rules -->
+    <string name="automation_rules">Automation Rules</string>
+    <string name="no_rules">No rules configured. Tap + to create one.</string>
+    <string name="edit_rule">Edit Rule</string>
+    <string name="new_rule">New Rule</string>
+    <string name="rule_name">Rule Name</string>
+    <string name="description">Description</string>
+    <string name="trigger_if">Trigger (IF)</string>
+    <string name="action_then">Action (THEN)</string>
+    <string name="threshold_count">Threshold / Count</string>
+    <string name="save_rule">Save Rule</string>
+    <string name="rule_format">IF %1$s → %2$s</string>
+
+    <!-- Decoy -->
+    <string name="decoy_mode">Decoy Mode</string>
+    <string name="decoy_desc">Configure fake content shown under coercion. The UI appears authentic to observers.</string>
+    <string name="fake_gallery">Fake Gallery</string>
+    <string name="fake_contacts">Fake Contacts</string>
+    <string name="fake_notes">Fake Notes</string>
+    <string name="gallery">Gallery</string>
+    <string name="contacts">Contacts</string>
+    <string name="notes">Notes</string>
+
+    <!-- App Locker -->
+    <string name="app_locker">App Locker</string>
+    <string name="lock_all_now">Lock All Now</string>
+    <string name="no_locked_apps">No protected apps. Tap + to add.</string>
+    <string name="protect_app">Protect Application</string>
+    <string name="app_name_label">App Name</string>
+    <string name="package_name">Package Name</string>
+    <string name="lock_method">Lock Method: %1$s</string>
+    <string name="app_protected">This app is protected by Sentinel</string>
+    <string name="enter_pin">Enter PIN</string>
+
+    <!-- Panic -->
+    <string name="panic_center">Panic Control Center</string>
+    <string name="panic_desc">Instant defensive actions. Also accessible via Quick Settings tile and hardware triggers.</string>
+    <string name="full_panic">FULL PANIC SEQUENCE</string>
+    <string name="individual_actions">Individual Actions</string>
+    <string name="panic_emergency_profile">Activate Emergency Profile</string>
+    <string name="panic_lock_apps">Lock All Apps</string>
+    <string name="panic_decoy">Enable Decoy Mode</string>
+    <string name="panic_notifications">Suppress Notifications</string>
+    <string name="activation_methods">Activation Methods</string>
+    <string name="method_qs_tile">Quick Settings Tile</string>
+    <string name="method_floating">Floating Panic Button</string>
+    <string name="method_power_x5">Power Button ×5</string>
+    <string name="method_power_volume">Power + Volume Up</string>
+    <string name="method_gesture">Secret Gesture</string>
+    <string name="last_action">Last action: %1$s</string>
+    <string name="action_emergency_profile">Emergency profile activated</string>
+    <string name="action_lock_apps">All apps locked</string>
+    <string name="action_decoy">Decoy mode activated</string>
+    <string name="action_notifications">Notifications suppressed</string>
+    <string name="action_full_panic">Full panic sequence executed</string>
+
+    <!-- Events -->
+    <string name="event_log">Security Event Log</string>
+    <string name="search_events">Search events…</string>
+    <string name="rule_label">Rule: %1$s</string>
+    <string name="source_label">Source: %1$s</string>
+
+    <!-- Settings -->
+    <string name="section_security">Security</string>
+    <string name="duress_passwords">Duress Passwords</string>
+    <string name="backup_restore">Backup &amp; Restore</string>
+    <string name="section_permissions">Permissions</string>
+    <string name="perm_accessibility">Enable Accessibility Service for app monitoring and automation.</string>
+    <string name="perm_device_admin">Enable Device Admin for intrusion detection.</string>
+    <string name="section_language">Language</string>
+    <string name="language_desc">Choose the app display language.</string>
+    <string name="language_english">English</string>
+    <string name="language_persian">فارسی</string>
+    <string name="section_about">About</string>
+    <string name="about_version">Sentinel v1.0.0</string>
+    <string name="about_desc">Offline personal security automation platform.</string>
+
+    <!-- Duress -->
+    <string name="duress_desc">Configure multiple passwords. Duress passwords trigger defensive actions silently.</string>
+    <string name="main_password">Main Password (normal unlock)</string>
+    <string name="save_main_password">Save Main Password</string>
+    <string name="duress_1">Duress 1 → Decoy Mode</string>
+    <string name="duress_2">Duress 2 → Lock Apps</string>
+    <string name="duress_3">Duress 3 → Emergency Actions</string>
+    <string name="save_duress_password">Save Duress Password %1$d</string>
+    <string name="password_too_short">Password must be at least 4 characters</string>
+    <string name="main_password_saved">Main password saved</string>
+    <string name="duress_password_saved">Duress password %1$d saved</string>
+
+    <!-- Backup -->
+    <string name="backup_desc">Export and import encrypted settings. All data stays on-device.</string>
+    <string name="export_backup">Export Encrypted Backup</string>
+    <string name="paste_backup">Paste backup payload</string>
+    <string name="import_backup">Import Backup</string>
+    <string name="export_success">Backup exported (%1$d encrypted chars)</string>
+    <string name="export_failed">Export failed: %1$s</string>
+    <string name="import_success">Backup imported: %1$d profiles, %2$d rules</string>
+    <string name="import_failed">Import failed: %1$s</string>
 </resources>
