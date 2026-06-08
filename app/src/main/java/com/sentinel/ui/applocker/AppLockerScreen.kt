@@ -1,8 +1,9 @@
 package com.sentinel.ui.applocker
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.sentinel.ui.base.LocaleAwareComponentActivity
+import com.sentinel.ui.theme.SentinelLocaleProvider
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -70,29 +71,31 @@ class AppLockerViewModel @Inject constructor(
 }
 
 @AndroidEntryPoint
-class LockOverlayActivity : ComponentActivity() {
+class LockOverlayActivity : LocaleAwareComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val appName = intent.getStringExtra("app_name") ?: "Protected App"
         setContent {
-            SentinelTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
-                    Column(
-                        modifier = Modifier.fillMaxSize().padding(32.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Icon(Icons.Default.Lock, null, modifier = Modifier.size(64.dp))
-                        Spacer(Modifier.height(16.dp))
-                        Text(appName, style = MaterialTheme.typography.headlineMedium)
-                        Text(stringResource(R.string.app_protected), style = MaterialTheme.typography.bodyMedium)
-                        Spacer(Modifier.height(32.dp))
-                        OutlinedTextField(
-                            value = "",
-                            onValueChange = {},
-                            label = { Text(stringResource(R.string.enter_pin)) },
-                            modifier = Modifier.fillMaxWidth()
-                        )
+            SentinelLocaleProvider {
+                SentinelTheme {
+                    Surface(modifier = Modifier.fillMaxSize()) {
+                        Column(
+                            modifier = Modifier.fillMaxSize().padding(32.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Icon(Icons.Default.Lock, null, modifier = Modifier.size(64.dp))
+                            Spacer(Modifier.height(16.dp))
+                            Text(appName, style = MaterialTheme.typography.headlineMedium)
+                            Text(stringResource(R.string.app_protected), style = MaterialTheme.typography.bodyMedium)
+                            Spacer(Modifier.height(32.dp))
+                            OutlinedTextField(
+                                value = "",
+                                onValueChange = {},
+                                label = { Text(stringResource(R.string.enter_pin)) },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
                     }
                 }
             }

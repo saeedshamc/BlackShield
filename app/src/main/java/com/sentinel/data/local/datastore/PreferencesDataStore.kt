@@ -7,6 +7,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.sentinel.domain.model.AppLanguage
 import com.sentinel.domain.model.ThemeMode
 import com.sentinel.util.Constants
+import com.sentinel.util.LocaleManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -57,8 +58,9 @@ class PreferencesDataStore @Inject constructor(
         it[Keys.FAILED_UNLOCK_COUNT] ?: 0
     }
 
-    val appLanguage: Flow<AppLanguage> = context.dataStore.data.map {
-        AppLanguage.fromCode(it[Keys.APP_LANGUAGE])
+    val appLanguage: Flow<AppLanguage> = context.dataStore.data.map { prefs ->
+        prefs[Keys.APP_LANGUAGE]?.let { AppLanguage.fromCode(it) }
+            ?: LocaleManager.currentLanguage(context)
     }
 
     suspend fun setActiveProfileId(id: Long) = edit { it[Keys.ACTIVE_PROFILE_ID] = id }

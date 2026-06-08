@@ -12,8 +12,10 @@ import com.sentinel.domain.usecase.backup.ImportBackupUseCase
 import com.sentinel.util.LocaleManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,9 +31,11 @@ class SettingsViewModel @Inject constructor(
 
     fun setLanguage(language: AppLanguage, onApplied: () -> Unit) {
         viewModelScope.launch {
-            preferencesDataStore.setAppLanguage(language)
             LocaleManager.persist(context, language)
-            onApplied()
+            preferencesDataStore.setAppLanguage(language)
+            withContext(Dispatchers.Main.immediate) {
+                onApplied()
+            }
         }
     }
 }

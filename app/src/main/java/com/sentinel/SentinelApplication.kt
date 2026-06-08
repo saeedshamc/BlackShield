@@ -2,10 +2,10 @@ package com.sentinel
 
 import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
+import com.sentinel.util.LocaleManager
 import androidx.work.Configuration
 import com.sentinel.domain.usecase.decoy.EnsureDecoyDefaultsUseCase
 import com.sentinel.domain.usecase.profile.EnsureDefaultProfilesUseCase
-import com.sentinel.util.LocaleManager
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

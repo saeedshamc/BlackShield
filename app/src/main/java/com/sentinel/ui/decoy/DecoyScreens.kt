@@ -1,8 +1,9 @@
 package com.sentinel.ui.decoy
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.sentinel.ui.base.LocaleAwareComponentActivity
+import com.sentinel.ui.theme.SentinelLocaleProvider
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -53,12 +54,14 @@ class DecoyViewModel @Inject constructor(
 }
 
 @AndroidEntryPoint
-class DecoyLauncherActivity : ComponentActivity() {
+class DecoyLauncherActivity : LocaleAwareComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SentinelTheme {
-                DecoyGalleryScreen(onNavigateBack = { finish() })
+            SentinelLocaleProvider {
+                SentinelTheme {
+                    DecoyGalleryScreen(onNavigateBack = { finish() })
+                }
             }
         }
     }
