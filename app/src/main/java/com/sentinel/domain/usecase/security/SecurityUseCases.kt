@@ -26,7 +26,7 @@ class IsAppLockedUseCase @Inject constructor(
     private val preferencesDataStore: PreferencesDataStore
 ) {
     suspend operator fun invoke(): Boolean {
-        if (!passwordRepository.isMainPasswordSet()) return false
+        if (!passwordRepository.isAnyPasswordSet()) return false
         return !preferencesDataStore.isAppUnlocked.first()
     }
 }

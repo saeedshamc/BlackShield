@@ -8,6 +8,7 @@ import com.sentinel.security.CryptoManager
 import com.sentinel.security.SecurePreferences
 import com.sentinel.util.Constants
 import com.sentinel.util.JsonUtil
+import com.sentinel.util.PasswordNormalizer
 import com.sentinel.domain.model.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -52,9 +53,10 @@ class PasswordRepository @Inject constructor(
     )
 
     fun setMainPassword(password: String) {
-        securePreferences.putString(
+        val normalized = PasswordNormalizer.normalize(password)
+        securePreferences.putStringSync(
             Constants.KEY_MAIN_PASSWORD_HASH,
-            cryptoManager.hashPassword(password)
+            cryptoManager.hashPassword(normalized)
         )
     }
 
@@ -65,15 +67,22 @@ class PasswordRepository @Inject constructor(
             3 -> Constants.KEY_DURESS_PASSWORD_3_HASH
             else -> return
         }
-        securePreferences.putString(key, cryptoManager.hashPassword(password))
+        val normalized = PasswordNormalizer.normalize(password)
+        securePreferences.putStringSync(key, cryptoManager.hashPassword(normalized))
     }
 
     fun setDuressActions(index: Int, actions: List<SecurityAction>) {
-        securePreferences.putString("duress${index}_actions", JsonUtil.toJson(actions))
+        securePreferences.putStringSync("duress${index}_actions", JsonUtil.toJson(actions))
     }
 
     fun isMainPasswordSet(): Boolean =
         securePreferences.getString(Constants.KEY_MAIN_PASSWORD_HASH).isNotEmpty()
+
+    fun isAnyPasswordSet(): Boolean =
+        isMainPasswordSet() ||
+            isDuressPasswordSet(1) ||
+            isDuressPasswordSet(2) ||
+            isDuressPasswordSet(3)
 
     fun isDuressPasswordSet(index: Int): Boolean = when (index) {
         1 -> securePreferences.getString(Constants.KEY_DURESS_PASSWORD_1_HASH).isNotEmpty()
@@ -86,11 +95,12 @@ class PasswordRepository @Inject constructor(
         plainPassword: String,
         forDuressIndex: Int? = null
     ): PasswordValidationError? {
-        if (plainPassword.length < 4) return PasswordValidationError.TOO_SHORT
+        val normalized = PasswordNormalizer.normalize(plainPassword)
+        if (normalized.length < 4) return PasswordValidationError.TOO_SHORT
         val config = getPasswordConfig()
         if (forDuressIndex != null) {
             if (config.mainPasswordHash.isNotEmpty() &&
-                cryptoManager.verifyPassword(plainPassword, config.mainPasswordHash)
+                cryptoManager.verifyPassword(normalized, config.mainPasswordHash)
             ) {
                 return PasswordValidationError.SAME_AS_MAIN
             }
@@ -103,7 +113,7 @@ class PasswordRepository @Inject constructor(
             hash.isNotEmpty() && index != forDuressIndex
         }
         if (duressHashes.any { (_, hash) ->
-                cryptoManager.verifyPassword(plainPassword, hash)
+                cryptoManager.verifyPassword(normalized, hash)
             }
         ) {
             return PasswordValidationError.SAME_AS_OTHER_DURESS
@@ -112,19 +122,21 @@ class PasswordRepository @Inject constructor(
     }
 
     fun verifyPassword(password: String): PasswordVerificationResult {
+        val normalized = PasswordNormalizer.normalize(password)
+        if (normalized.isEmpty()) return PasswordVerificationResult(PasswordType.INVALID)
         val config = getPasswordConfig()
         return when {
             config.mainPasswordHash.isNotEmpty() &&
-                cryptoManager.verifyPassword(password, config.mainPasswordHash) ->
+                cryptoManager.verifyPassword(normalized, config.mainPasswordHash) ->
                 PasswordVerificationResult(PasswordType.MAIN)
             config.duressPassword1Hash.isNotEmpty() &&
-                cryptoManager.verifyPassword(password, config.duressPassword1Hash) ->
+                cryptoManager.verifyPassword(normalized, config.duressPassword1Hash) ->
                 PasswordVerificationResult(PasswordType.DURESS_1, config.duress1Actions)
             config.duressPassword2Hash.isNotEmpty() &&
-                cryptoManager.verifyPassword(password, config.duressPassword2Hash) ->
+                cryptoManager.verifyPassword(normalized, config.duressPassword2Hash) ->
                 PasswordVerificationResult(PasswordType.DURESS_2, config.duress2Actions)
             config.duressPassword3Hash.isNotEmpty() &&
-                cryptoManager.verifyPassword(password, config.duressPassword3Hash) ->
+                cryptoManager.verifyPassword(normalized, config.duressPassword3Hash) ->
                 PasswordVerificationResult(PasswordType.DURESS_3, config.duress3Actions)
             else -> PasswordVerificationResult(PasswordType.INVALID)
         }

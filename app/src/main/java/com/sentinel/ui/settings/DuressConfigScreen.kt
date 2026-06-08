@@ -58,16 +58,28 @@ fun DuressConfigScreen(
 
     var pendingDuressForFiles by remember { mutableStateOf<Int?>(null) }
 
-    val filePicker = rememberLauncherForActivityResult(
-        ActivityResultContracts.OpenMultipleDocuments()
-    ) { uris ->
+    fun onFilesPicked(uris: List<android.net.Uri>) {
+        if (uris.isEmpty()) return
         uris.forEach { uri ->
             UriFileHelper.takePersistableAccess(context, uri)
             val name = UriFileHelper.queryDisplayName(context, uri)
-            viewModel.addSensitiveFileFromUri(name, uri.toString(), isFolder = false, assignToDuress = pendingDuressForFiles)
+            viewModel.addSensitiveFileFromUri(
+                name,
+                uri.toString(),
+                isFolder = false,
+                assignToDuress = pendingDuressForFiles
+            )
         }
         pendingDuressForFiles = null
     }
+
+    val documentPicker = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenMultipleDocuments()
+    ) { uris -> onFilesPicked(uris) }
+
+    val contentPicker = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetMultipleContents()
+    ) { uris -> onFilesPicked(uris) }
 
     val folderPicker = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocumentTree()
@@ -80,15 +92,21 @@ fun DuressConfigScreen(
         pendingDuressForFiles = null
     }
 
-    fun launchFilePicker(duressIndex: Int? = null) {
-        appLockCoordinator.suppressLockOnNextStop()
+    fun launchDocumentPicker(duressIndex: Int? = null) {
         pendingDuressForFiles = duressIndex
-        filePicker.launch(arrayOf("*/*"))
+        appLockCoordinator.suppressLockForExternalPicker()
+        documentPicker.launch(arrayOf("*/*"))
+    }
+
+    fun launchContentPicker(duressIndex: Int? = null) {
+        pendingDuressForFiles = duressIndex
+        appLockCoordinator.suppressLockForExternalPicker()
+        contentPicker.launch("*/*")
     }
 
     fun launchFolderPicker(duressIndex: Int? = null) {
-        appLockCoordinator.suppressLockOnNextStop()
         pendingDuressForFiles = duressIndex
+        appLockCoordinator.suppressLockForExternalPicker()
         folderPicker.launch(null)
     }
 
@@ -160,7 +178,8 @@ fun DuressConfigScreen(
                     onToggleAction = { viewModel.toggleAction(1, it) },
                     onProfileChange = { viewModel.updateProfile(1, it) },
                     onSave = { viewModel.saveDuress(1) },
-                    onPickFiles = { launchFilePicker(1) },
+                    onPickFiles = { launchDocumentPicker(1) },
+                    onPickContent = { launchContentPicker(1) },
                     onPickFolder = { launchFolderPicker(1) }
                 )
             }
@@ -177,7 +196,8 @@ fun DuressConfigScreen(
                     onToggleAction = { viewModel.toggleAction(2, it) },
                     onProfileChange = { viewModel.updateProfile(2, it) },
                     onSave = { viewModel.saveDuress(2) },
-                    onPickFiles = { launchFilePicker(2) },
+                    onPickFiles = { launchDocumentPicker(2) },
+                    onPickContent = { launchContentPicker(2) },
                     onPickFolder = { launchFolderPicker(2) }
                 )
             }
@@ -194,7 +214,8 @@ fun DuressConfigScreen(
                     onToggleAction = { viewModel.toggleAction(3, it) },
                     onProfileChange = { viewModel.updateProfile(3, it) },
                     onSave = { viewModel.saveDuress(3) },
-                    onPickFiles = { launchFilePicker(3) },
+                    onPickFiles = { launchDocumentPicker(3) },
+                    onPickContent = { launchContentPicker(3) },
                     onPickFolder = { launchFolderPicker(3) }
                 )
             }
@@ -208,24 +229,11 @@ fun DuressConfigScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(Modifier.height(12.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        OutlinedButton(
-                            onClick = { launchFilePicker(null) },
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Icon(Icons.Default.InsertDriveFile, null, Modifier.size(18.dp))
-                            Spacer(Modifier.width(4.dp))
-                            Text(stringResource(R.string.pick_files))
-                        }
-                        OutlinedButton(
-                            onClick = { launchFolderPicker(null) },
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Icon(Icons.Default.FolderOpen, null, Modifier.size(18.dp))
-                            Spacer(Modifier.width(4.dp))
-                            Text(stringResource(R.string.pick_folder))
-                        }
-                    }
+                    FilePickerButtons(
+                        onPickDocuments = { launchDocumentPicker(null) },
+                        onPickContent = { launchContentPicker(null) },
+                        onPickFolder = { launchFolderPicker(null) }
+                    )
                 }
             }
 
@@ -279,6 +287,7 @@ private fun DuressLevelSection(
     onProfileChange: (String) -> Unit,
     onSave: () -> Unit,
     onPickFiles: () -> Unit,
+    onPickContent: () -> Unit,
     onPickFolder: () -> Unit
 ) {
     SectionHeader(title)
@@ -362,18 +371,11 @@ private fun DuressLevelSection(
                 }
             }
             Spacer(Modifier.height(8.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedButton(onClick = onPickFiles, modifier = Modifier.weight(1f)) {
-                    Icon(Icons.Default.InsertDriveFile, null, Modifier.size(16.dp))
-                    Spacer(Modifier.width(4.dp))
-                    Text(stringResource(R.string.pick_files))
-                }
-                OutlinedButton(onClick = onPickFolder, modifier = Modifier.weight(1f)) {
-                    Icon(Icons.Default.FolderOpen, null, Modifier.size(16.dp))
-                    Spacer(Modifier.width(4.dp))
-                    Text(stringResource(R.string.pick_folder))
-                }
-            }
+            FilePickerButtons(
+                onPickDocuments = onPickFiles,
+                onPickContent = onPickContent,
+                onPickFolder = onPickFolder
+            )
         }
 
         if (selectedActions.contains(ActionType.ACTIVATE_PROFILE)) {
@@ -392,6 +394,31 @@ private fun DuressLevelSection(
         Spacer(Modifier.height(12.dp))
         Button(onClick = onSave, modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.save_duress_config, index))
+        }
+    }
+}
+
+@Composable
+private fun FilePickerButtons(
+    onPickDocuments: () -> Unit,
+    onPickContent: () -> Unit,
+    onPickFolder: () -> Unit
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        OutlinedButton(onClick = onPickDocuments, modifier = Modifier.fillMaxWidth()) {
+            Icon(Icons.Default.InsertDriveFile, null, Modifier.size(18.dp))
+            Spacer(Modifier.width(8.dp))
+            Text(stringResource(R.string.pick_files))
+        }
+        OutlinedButton(onClick = onPickContent, modifier = Modifier.fillMaxWidth()) {
+            Icon(Icons.Default.InsertDriveFile, null, Modifier.size(18.dp))
+            Spacer(Modifier.width(8.dp))
+            Text(stringResource(R.string.pick_files_alt))
+        }
+        OutlinedButton(onClick = onPickFolder, modifier = Modifier.fillMaxWidth()) {
+            Icon(Icons.Default.FolderOpen, null, Modifier.size(18.dp))
+            Spacer(Modifier.width(8.dp))
+            Text(stringResource(R.string.pick_folder))
         }
     }
 }

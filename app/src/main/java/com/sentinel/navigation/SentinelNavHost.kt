@@ -21,6 +21,7 @@ import com.sentinel.ui.rules.RuleListScreen
 import com.sentinel.ui.settings.BackupScreen
 import com.sentinel.ui.settings.DuressConfigScreen
 import com.sentinel.ui.settings.SettingsScreen
+import com.sentinel.ui.settings.UserGuideScreen
 
 @Composable
 fun SentinelNavHost(modifier: Modifier = Modifier) {
@@ -96,6 +97,9 @@ fun SentinelNavHost(modifier: Modifier = Modifier) {
         }
         composable(SentinelRoutes.BACKUP) {
             BackupScreen(onNavigateBack = { navController.popBackStack() })
+        }
+        composable(SentinelRoutes.USER_GUIDE) {
+            UserGuideScreen(onNavigateBack = { navController.popBackStack() })
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.sentinel.security
 
-import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -9,11 +8,20 @@ import javax.inject.Singleton
  */
 @Singleton
 class AppLockCoordinator @Inject constructor() {
-    private val suppressNextStop = AtomicBoolean(false)
+    private val suppressStopsRemaining = java.util.concurrent.atomic.AtomicInteger(0)
 
-    fun suppressLockOnNextStop() {
-        suppressNextStop.set(true)
+    /** Suppress re-lock while user leaves app for picker (open + return). */
+    fun suppressLockForExternalPicker() {
+        suppressStopsRemaining.set(2)
     }
 
-    fun shouldLockOnStop(): Boolean = !suppressNextStop.getAndSet(false)
+    fun shouldLockOnStop(): Boolean {
+        val remaining = suppressStopsRemaining.get()
+        return if (remaining > 0) {
+            suppressStopsRemaining.decrementAndGet()
+            false
+        } else {
+            true
+        }
+    }
 }

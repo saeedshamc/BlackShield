@@ -56,6 +56,9 @@ fun SettingsScreen(
                 )
             }
 
+            SectionHeader(stringResource(R.string.section_help))
+            SettingsItem(stringResource(R.string.user_guide), Icons.Default.MenuBook, SentinelRoutes.USER_GUIDE, onNavigate)
+
             SectionHeader(stringResource(R.string.section_security))
             SettingsItem(stringResource(R.string.duress_passwords), Icons.Default.Password, SentinelRoutes.DURESS_PASSWORD, onNavigate)
             SettingsItem(stringResource(R.string.backup_restore), Icons.Default.Backup, SentinelRoutes.BACKUP, onNavigate)

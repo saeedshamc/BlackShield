@@ -202,7 +202,7 @@
 
     <!-- Unlock -->
     <string name="unlock_title">Unlock Sentinel</string>
-    <string name="unlock_subtitle">Enter your password to continue</string>
+    <string name="unlock_subtitle">Enter your Sentinel password (not your phone lock screen PIN)</string>
     <string name="unlock_password_label">Password</string>
     <string name="unlock_button">Unlock</string>
     <string name="unlock_error_empty">Please enter your password</string>
@@ -218,4 +218,37 @@
     <string name="export_failed">Export failed: %1$s</string>
     <string name="import_success">Backup imported: %1$d profiles, %2$d rules</string>
     <string name="import_failed">Import failed: %1$s</string>
+
+    <!-- App picker -->
+    <string name="select_installed_app">Select installed app</string>
+    <string name="search_apps">Search apps…</string>
+    <string name="no_apps_found">No apps found</string>
+    <string name="app_locker_hint">Tap + to pick an app from your phone. No package name needed.</string>
+    <string name="pick_files_alt">Pick files (alternate method)</string>
+
+    <!-- Decoy toggle -->
+    <string name="decoy_mode_inactive">Decoy mode is OFF</string>
+    <string name="decoy_toggle_desc">Turn ON to show fake content. Turn OFF to return to normal.</string>
+
+    <!-- User guide -->
+    <string name="section_help">Help</string>
+    <string name="user_guide">How to use Sentinel</string>
+    <string name="guide_unlock_title">App lock screen</string>
+    <string name="guide_unlock_body">Important: Sentinel passwords unlock the Sentinel app only — NOT your phone lock screen.\nIN: Open the Sentinel app.\nOUT: Enter main or duress password.\nAfter phone reboot: open Sentinel again and use the same duress password.</string>
+    <string name="guide_duress_title">Duress passwords</string>
+    <string name="guide_duress_body">GO: Settings → Duress Passwords.\n1) Save main password first.\n2) Set duress password (different from main).\n3) Check actions (e.g. delete files).\n4) Tap Save duress.\nTEST: Close app → open → enter duress password. App opens; actions run in background.</string>
+    <string name="guide_files_title">Selecting files for deletion</string>
+    <string name="guide_files_body">GO: Settings → Duress Passwords → scroll to files section.\n• Pick files — system file manager\n• Pick files (alternate) — if first button does not open\n• Pick folder — for entire folders\nAssign each file to duress 1/2/3 with chips.</string>
+    <string name="guide_apps_title">Locking apps</string>
+    <string name="guide_apps_body">GO: Dashboard → Locked Apps (or App Locker card).\nTap + → search and select app from list.\nOUT: Remove app with trash icon.\nLock All Now locks every protected app immediately.</string>
+    <string name="guide_profiles_title">Emergency profiles</string>
+    <string name="guide_profiles_body">GO: Dashboard → Active Profile or Quick Access → Profiles.\nIN: Tap a profile to activate it.\nOUT: Tap Normal Mode profile to return to default.\nActive profile shows a checkmark.</string>
+    <string name="guide_decoy_title">Decoy mode</string>
+    <string name="guide_decoy_body">GO: Quick Access → Decoy.\nIN: Turn switch ON (or trigger via duress/panic).\nOUT: Return to Decoy screen → turn switch OFF.\nEdit fake gallery/contacts/notes from the same screen.</string>
+    <string name="guide_rules_title">Automation rules</string>
+    <string name="guide_rules_body">GO: Dashboard → Rules → + button.\nSet trigger (IF) and one or more actions (THEN).\nSave rule. Toggle switch to enable/disable.\nBack arrow returns to rules list.</string>
+    <string name="guide_panic_title">Panic center</string>
+    <string name="guide_panic_body">GO: Red emergency button on dashboard.\nTap actions for instant defense.\nBack arrow returns to dashboard.</string>
+    <string name="guide_navigation_title">General navigation</string>
+    <string name="guide_navigation_body">← Back arrow (top left) exits current screen.\nDashboard is home. Settings (gear icon) for language, duress, backup, and this guide.</string>
 </resources>

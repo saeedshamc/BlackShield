@@ -37,6 +37,10 @@ class SecurePreferences @Inject constructor(
         prefs.edit().putString(key, value).apply()
     }
 
+    /** Synchronous write — required for passwords to survive immediate power-off/reboot. */
+    fun putStringSync(key: String, value: String): Boolean =
+        prefs.edit().putString(key, value).commit()
+
     fun getBoolean(key: String, default: Boolean = false): Boolean =
         prefs.getBoolean(key, default)
 

@@ -6,6 +6,7 @@ import android.content.Intent
 import com.sentinel.domain.model.*
 import com.sentinel.domain.usecase.rule.ProcessSecurityEventUseCase
 import com.sentinel.data.repository.SecurityEventRepository
+import com.sentinel.domain.usecase.security.LockAppUseCase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,19 +18,24 @@ import javax.inject.Inject
 class BootReceiver : BroadcastReceiver() {
 
     @Inject lateinit var securityEventRepository: SecurityEventRepository
-
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    @Inject lateinit var lockApp: LockAppUseCase
 
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
-        scope.launch {
-            securityEventRepository.logEvent(
-                SecurityEvent(
-                    eventType = EventType.SETTINGS_CHANGED,
-                    triggerSource = EventSource.BOOT_RECEIVER,
-                    details = "Device booted — Sentinel services restored"
+        val pending = goAsync()
+        CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+            try {
+                lockApp()
+                securityEventRepository.logEvent(
+                    SecurityEvent(
+                        eventType = EventType.SETTINGS_CHANGED,
+                        triggerSource = EventSource.BOOT_RECEIVER,
+                        details = "Device booted — app lock reset, passwords retained"
+                    )
                 )
-            )
+            } finally {
+                pending.finish()
+            }
         }
     }
 }

@@ -20,7 +20,7 @@ class AppGateViewModel @Inject constructor(
     private val _needsUnlock = MutableStateFlow(true)
     val needsUnlock: StateFlow<Boolean> = _needsUnlock.asStateFlow()
 
-    val hasPassword: Boolean get() = passwordRepository.isMainPasswordSet()
+    val hasPassword: Boolean get() = passwordRepository.isAnyPasswordSet()
 
     init {
         refresh()

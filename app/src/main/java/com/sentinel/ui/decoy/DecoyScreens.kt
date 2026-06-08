@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.sentinel.R
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.sentinel.data.local.datastore.PreferencesDataStore
 import com.sentinel.domain.model.DecoyCategory
 import com.sentinel.domain.usecase.decoy.ObserveDecoyContentUseCase
 import com.sentinel.navigation.SentinelRoutes
@@ -37,13 +38,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import javax.inject.Inject
 
 @HiltViewModel
 class DecoyViewModel @Inject constructor(
-    observeDecoyContent: ObserveDecoyContentUseCase
+    observeDecoyContent: ObserveDecoyContentUseCase,
+    private val preferencesDataStore: PreferencesDataStore
 ) : ViewModel() {
     val gallery = observeDecoyContent(DecoyCategory.GALLERY)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
@@ -51,6 +54,13 @@ class DecoyViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
     val notes = observeDecoyContent(DecoyCategory.NOTES)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    val decoyActive: StateFlow<Boolean> = preferencesDataStore.decoyModeActive
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+
+    fun setDecoyActive(active: Boolean) = viewModelScope.launch {
+        preferencesDataStore.setDecoyModeActive(active)
+    }
 }
 
 @AndroidEntryPoint
@@ -70,13 +80,40 @@ class DecoyLauncherActivity : LocaleAwareComponentActivity() {
 @Composable
 fun DecoyConfigScreen(
     onNavigateBack: () -> Unit,
-    onNavigate: (String) -> Unit
+    onNavigate: (String) -> Unit,
+    viewModel: DecoyViewModel = hiltViewModel()
 ) {
+    val decoyActive by viewModel.decoyActive.collectAsStateWithLifecycle()
+
     Scaffold(topBar = { SentinelTopBar(stringResource(R.string.decoy_mode), onNavigateBack) }) { padding ->
         Column(
             modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
+            SentinelCard {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            if (decoyActive) stringResource(R.string.decoy_mode_active)
+                            else stringResource(R.string.decoy_mode_inactive),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Text(
+                            stringResource(R.string.decoy_toggle_desc),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Switch(
+                        checked = decoyActive,
+                        onCheckedChange = viewModel::setDecoyActive
+                    )
+                }
+            }
             Text(
                 stringResource(R.string.decoy_desc),
                 style = MaterialTheme.typography.bodyMedium,

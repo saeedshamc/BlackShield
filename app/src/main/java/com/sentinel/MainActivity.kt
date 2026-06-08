@@ -57,7 +57,7 @@ class MainActivity : LocaleAwareComponentActivity() {
 
     override fun onStop() {
         super.onStop()
-        if (appLockCoordinator.shouldLockOnStop() && passwordRepository.isMainPasswordSet()) {
+        if (appLockCoordinator.shouldLockOnStop() && passwordRepository.isAnyPasswordSet()) {
             lifecycleScope.launch { lockApp() }
         }
     }

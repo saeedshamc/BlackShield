@@ -17,6 +17,7 @@ object SentinelRoutes {
     const val SETTINGS = "settings"
     const val DURESS_PASSWORD = "settings/duress"
     const val BACKUP = "settings/backup"
+    const val USER_GUIDE = "settings/guide"
 
     fun ruleBuilder(ruleId: Long? = null): String =
         if (ruleId != null) "rules/builder/$ruleId" else RULE_BUILDER

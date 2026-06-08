@@ -202,7 +202,7 @@
 
     <!-- Unlock -->
     <string name="unlock_title">باز کردن سنتینل</string>
-    <string name="unlock_subtitle">رمز خود را وارد کنید</string>
+    <string name="unlock_subtitle">رمز سنتینل را وارد کنید (نه رمز قفل گوشی)</string>
     <string name="unlock_password_label">رمز</string>
     <string name="unlock_button">باز کردن</string>
     <string name="unlock_error_empty">لطفاً رمز را وارد کنید</string>
@@ -218,4 +218,37 @@
     <string name="export_failed">صدور ناموفق: %1$s</string>
     <string name="import_success">پشتیبان وارد شد: %1$d پروفایل، %2$d قانون</string>
     <string name="import_failed">ورود ناموفق: %1$s</string>
+
+    <!-- App picker -->
+    <string name="select_installed_app">انتخاب برنامه نصب‌شده</string>
+    <string name="search_apps">جستجوی برنامه…</string>
+    <string name="no_apps_found">برنامه‌ای یافت نشد</string>
+    <string name="app_locker_hint">دکمه + را بزنید و برنامه را از لیست گوشی انتخاب کنید.</string>
+    <string name="pick_files_alt">انتخاب فایل (روش جایگزین)</string>
+
+    <!-- Decoy toggle -->
+    <string name="decoy_mode_inactive">حالت فریب خاموش است</string>
+    <string name="decoy_toggle_desc">روشن = محتوای جعلی. خاموش = بازگشت به حالت عادی.</string>
+
+    <!-- User guide -->
+    <string name="section_help">راهنما</string>
+    <string name="user_guide">آموزش استفاده از سنتینل</string>
+    <string name="guide_unlock_title">قفل اپ</string>
+    <string name="guide_unlock_body">مهم: رمز سنتینل فقط برای باز کردن اپ سنتینل است — روی قفل صفحه گوشی کار نمی‌کند.\nورود: اپ سنتینل را باز کنید.\nخروج: رمز اصلی یا اجبار را بزنید.\nبعد از خاموش/روشن گوشی: دوباره سنتینل را باز کنید و همان رمز اجبار را بزنید.</string>
+    <string name="guide_duress_title">رمز اجبار</string>
+    <string name="guide_duress_body">مسیر: تنظیمات ← رمزهای اجبار.\n۱) ابتدا رمز اصلی را ذخیره کنید.\n۲) رمز اجبار بزنید (متفاوت از اصلی).\n۳) اقدامات را تیک بزنید.\n۴) ذخیره اجبار.\nتست: اپ را ببندید → باز کنید → رمز اجبار. اپ باز می‌شود؛ اقدامات در پس‌زمینه اجرا می‌شوند.</string>
+    <string name="guide_files_title">انتخاب فایل برای حذف</string>
+    <string name="guide_files_body">مسیر: تنظیمات ← رمزهای اجبار ← بخش فایل‌ها.\n• انتخاب فایل — مدیر فایل سیستم\n• انتخاب فایل (جایگزین) — اگر دکمه اول باز نشد\n• انتخاب پوشه — برای کل پوشه\nبا چیپ ا۱/۲/۳ مشخص کنید کدام رمز اجبار حذف کند.</string>
+    <string name="guide_apps_title">قفل برنامه‌ها</string>
+    <string name="guide_apps_body">مسیر: داشبورد ← برنامه‌های قفل‌شده.\nدکمه + ← برنامه را از لیست انتخاب کنید.\nخروج: آیکون سطل زباله.\nقفل همه = قفل فوری همه برنامه‌های محافظت‌شده.</string>
+    <string name="guide_profiles_title">پروفایل‌های اضطراری</string>
+    <string name="guide_profiles_body">مسیر: داشبورد ← پروفایل فعال یا دسترسی سریع ← پروفایل‌ها.\nورود: روی پروفایل بزنید.\nخروج: پروفایل Normal Mode را فعال کنید.\nپروفایل فعال علامت ✓ دارد.</string>
+    <string name="guide_decoy_title">حالت فریب</string>
+    <string name="guide_decoy_body">مسیر: دسترسی سریع ← فریب.\nورود: سوئیچ را روشن کنید (یا با رمز اجبار/پانیک).\nخروج: همان صفحه ← سوئیچ را خاموش کنید.\nگالری/مخاطب/یادداشت جعلی را از همانجا ویرایش کنید.</string>
+    <string name="guide_rules_title">قوانین خودکار</string>
+    <string name="guide_rules_body">مسیر: داشبورد ← قوانین ← +.\nمحرک (اگر) و اقدامات (آنگاه) را تنظیم کنید.\nذخیره. با سوئیچ فعال/غیرفعال کنید.\nفلش برگشت = لیست قوانین.</string>
+    <string name="guide_panic_title">مرکز پانیک</string>
+    <string name="guide_panic_body">مسیر: دکمه قرمز اضطراری روی داشبورد.\nاقدامات فوری را بزنید.\nفلش برگشت = داشبورد.</string>
+    <string name="guide_navigation_title">ناوبری کلی</string>
+    <string name="guide_navigation_body">← فلش بالا چپ = خروج از صفحه فعلی.\nداشبورد = خانه. تنظیمات (چرخ‌دنده) = زبان، رمز اجبار، پشتیبان، این راهنما.</string>
 </resources>
