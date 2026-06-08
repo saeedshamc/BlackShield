@@ -30,6 +30,9 @@ interface LogDao {
     @Query("DELETE FROM logs WHERE timestamp < :before")
     suspend fun deleteOlderThan(before: Long)
 
+    @Query("DELETE FROM logs")
+    suspend fun deleteAll()
+
     @Query("SELECT COUNT(*) FROM logs")
     fun observeCount(): Flow<Int>
 }

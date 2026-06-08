@@ -58,6 +58,40 @@
     <string name="threshold_count">آستانه / تعداد</string>
     <string name="save_rule">ذخیره قانون</string>
     <string name="rule_format">اگر %1$s ← %2$s</string>
+    <string name="actions_then">اقدامات (آنگاه)</string>
+    <string name="actions_then_desc">یک یا چند اقدام انتخاب کنید که با فعال شدن محرک اجرا شوند.</string>
+    <string name="add_action">افزودن اقدام</string>
+    <string name="select_profile">انتخاب پروفایل</string>
+
+    <!-- Triggers -->
+    <string name="trigger_wrong_password">تلاش‌های رمز اشتباه</string>
+    <string name="trigger_power_button">فشار دکمه پاور</string>
+    <string name="trigger_volume_combo">ترکیب دکمه‌های صدا</string>
+    <string name="trigger_secret_pin">وارد کردن پین مخفی</string>
+    <string name="trigger_sim_changed">تغییر سیم‌کارت</string>
+    <string name="trigger_app_opened">باز شدن برنامه</string>
+    <string name="trigger_screen_off">خاموش شدن صفحه</string>
+    <string name="trigger_screen_on">روشن شدن صفحه</string>
+    <string name="trigger_unlock_failure">شکست در باز کردن قفل</string>
+    <string name="trigger_accessibility_disabled">غیرفعال شدن دسترسی‌پذیری</string>
+    <string name="trigger_device_admin_removed">حذف مدیر دستگاه</string>
+    <string name="trigger_custom_gesture">حرکت سفارشی</string>
+    <string name="trigger_time_based">بر اساس زمان</string>
+    <string name="trigger_manual">دستی</string>
+
+    <!-- Actions -->
+    <string name="action_activate_profile">فعال‌سازی پروفایل</string>
+    <string name="action_lock_apps">قفل همه برنامه‌ها</string>
+    <string name="action_hide_apps">مخفی کردن برنامه‌ها</string>
+    <string name="action_activate_decoy">فعال‌سازی حالت فریب</string>
+    <string name="action_emergency">اجرای اقدامات اضطراری</string>
+    <string name="action_disable_notifications">غیرفعال کردن اعلان‌ها</string>
+    <string name="action_log_event">ثبت رویداد</string>
+    <string name="action_wipe_decoy">پاک کردن داده‌های فریب</string>
+    <string name="action_delete_files">حذف فایل‌های انتخاب‌شده</string>
+    <string name="action_clear_logs">پاک کردن گزارش امنیتی</string>
+    <string name="action_lock_device">قفل دستگاه</string>
+    <string name="action_custom">اقدام سفارشی</string>
 
     <!-- Decoy -->
     <string name="decoy_mode">حالت فریب</string>
@@ -96,9 +130,9 @@
     <string name="method_power_volume">پاور + ولوم بالا</string>
     <string name="method_gesture">ژست مخفی</string>
     <string name="last_action">آخرین اقدام: %1$s</string>
-    <string name="action_emergency_profile">پروفایل اضطراری فعال شد</string>
-    <string name="action_lock_apps">همه برنامه‌ها قفل شدند</string>
-    <string name="action_decoy">حالت فریب فعال شد</string>
+    <string name="panic_result_emergency_profile">پروفایل اضطراری فعال شد</string>
+    <string name="panic_result_lock_apps">همه برنامه‌ها قفل شدند</string>
+    <string name="panic_result_decoy">حالت فریب فعال شد</string>
     <string name="action_notifications">اعلان‌ها قطع شدند</string>
     <string name="action_full_panic">توالی کامل پانیک اجرا شد</string>
 
@@ -134,6 +168,46 @@
     <string name="password_too_short">رمز باید حداقل ۴ کاراکتر باشد</string>
     <string name="main_password_saved">رمز اصلی ذخیره شد</string>
     <string name="duress_password_saved">رمز اجبار %1$d ذخیره شد</string>
+    <string name="duress_config_saved">رمز اجبار و اقدامات ذخیره شد</string>
+    <string name="save_duress_config">ذخیره اجبار %1$d (رمز + اقدامات)</string>
+    <string name="duress_keep_password_hint">برای حفظ رمز فعلی خالی بگذارید — فقط اقدامات به‌روز می‌شوند.</string>
+    <string name="duress_change_password">رمز جدید (اختیاری)</string>
+    <string name="duress_password_required">رمز اجبار را وارد کنید (حداقل ۴ کاراکتر)</string>
+    <string name="duress_actions_required">حداقل یک اقدام انتخاب کنید</string>
+    <string name="main_password_required_first">ابتدا رمز اصلی را تنظیم کنید — رمز اجبار فقط بعد از آن کار می‌کند.</string>
+    <string name="password_same_as_main">رمز اجبار باید با رمز اصلی متفاوت باشد</string>
+    <string name="password_same_as_other_duress">رمز باید با سایر رمزهای اجبار متفاوت باشد</string>
+    <string name="pick_files">انتخاب فایل</string>
+    <string name="pick_folder">انتخاب پوشه</string>
+    <string name="files_for_this_duress">فایل‌های حذف‌شونده با این رمز اجبار:</string>
+    <string name="no_files_for_duress">فایلی انتخاب نشده — دکمه انتخاب فایل یا پوشه را بزنید</string>
+    <string name="file_added_success">فایل به لیست حذف اضافه شد</string>
+    <string name="file_label">فایل</string>
+    <string name="folder_label">پوشه</string>
+    <string name="duress_level">رمز اجبار %1$d</string>
+    <string name="duress_short">ا%1$d</string>
+    <string name="enter_new_password">رمز جدید را وارد کنید</string>
+    <string name="main_password_set_hint">رمز اصلی تنظیم شده. برای تغییر، رمز جدید وارد کنید.</string>
+    <string name="duress_password_set_hint">اجبار %1$d تنظیم شده. برای تغییر، رمز جدید وارد کنید.</string>
+    <string name="duress_actions_label">اقدامات هنگام باز شدن با رمز اجبار</string>
+    <string name="duress_unlock_hint">گوشی عادی باز می‌شود، اما اقدامات انتخاب‌شده در پس‌زمینه اجرا می‌شوند.</string>
+    <string name="destructive_action">مخرب — قابل بازگشت نیست</string>
+    <string name="sensitive_files_title">فایل‌های حذف‌شونده در اجبار</string>
+    <string name="sensitive_files_desc">فقط این فایل‌ها/پوشه‌ها حذف می‌شوند — نه کل گوشی.</string>
+    <string name="add_sensitive_file">افزودن فایل یا پوشه</string>
+    <string name="no_sensitive_files">فایلی تنظیم نشده. مسیر فایل‌هایی که می‌خواهید حذف شوند را اضافه کنید.</string>
+    <string name="file_display_name">نام نمایشی</string>
+    <string name="file_path">مسیر کامل</string>
+    <string name="sensitive_file_path_hint">مسیر کامل را وارد کنید (مثلاً /storage/emulated/0/Documents/secret.pdf)</string>
+
+    <!-- Unlock -->
+    <string name="unlock_title">باز کردن سنتینل</string>
+    <string name="unlock_subtitle">رمز خود را وارد کنید</string>
+    <string name="unlock_password_label">رمز</string>
+    <string name="unlock_button">باز کردن</string>
+    <string name="unlock_error_empty">لطفاً رمز را وارد کنید</string>
+    <string name="unlock_error_invalid">رمز اشتباه است</string>
+    <string name="unlock_duress_hint">رمزهای اجبار هم گوشی را باز می‌کنند و اقدامات تنظیم‌شده را مخفیانه اجرا می‌کنند.</string>
 
     <!-- Backup -->
     <string name="backup_desc">تنظیمات رمزنگاری‌شده را صادر یا وارد کنید. همه داده‌ها روی دستگاه می‌مانند.</string>

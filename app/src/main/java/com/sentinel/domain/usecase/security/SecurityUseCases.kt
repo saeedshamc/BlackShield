@@ -1,14 +1,16 @@
 package com.sentinel.domain.usecase.security
 
+import com.sentinel.data.local.datastore.PreferencesDataStore
 import com.sentinel.data.repository.PasswordRepository
 import com.sentinel.data.repository.SecurityEventRepository
 import com.sentinel.domain.model.*
 import com.sentinel.engine.ActionExecutor
 import com.sentinel.engine.RuleEngine
-import com.sentinel.data.local.datastore.PreferencesDataStore
 import com.sentinel.util.Constants
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ObserveSecurityEventsUseCase @Inject constructor(
@@ -19,11 +21,39 @@ class ObserveSecurityEventsUseCase @Inject constructor(
     fun search(query: String): Flow<List<SecurityEvent>> = repository.searchEvents(query)
 }
 
+class IsAppLockedUseCase @Inject constructor(
+    private val passwordRepository: PasswordRepository,
+    private val preferencesDataStore: PreferencesDataStore
+) {
+    suspend operator fun invoke(): Boolean {
+        if (!passwordRepository.isMainPasswordSet()) return false
+        return !preferencesDataStore.isAppUnlocked.first()
+    }
+}
+
+class UnlockAppUseCase @Inject constructor(
+    private val preferencesDataStore: PreferencesDataStore
+) {
+    suspend operator fun invoke() = preferencesDataStore.setAppUnlocked(true)
+}
+
+class LockAppUseCase @Inject constructor(
+    private val preferencesDataStore: PreferencesDataStore
+) {
+    suspend operator fun invoke() = preferencesDataStore.lockApp()
+}
+
+/**
+ * Verifies password. Main and duress passwords both unlock the app.
+ * Duress actions run silently in the background after unlock.
+ */
 class VerifyPasswordUseCase @Inject constructor(
     private val passwordRepository: PasswordRepository,
     private val actionExecutor: ActionExecutor,
     private val preferencesDataStore: PreferencesDataStore,
-    private val ruleEngine: RuleEngine
+    private val ruleEngine: RuleEngine,
+    private val unlockApp: UnlockAppUseCase,
+    private val applicationScope: CoroutineScope
 ) {
     suspend operator fun invoke(password: String): PasswordVerificationResult {
         val result = passwordRepository.verifyPassword(password)
@@ -41,11 +71,24 @@ class VerifyPasswordUseCase @Inject constructor(
                     )
                 }
             }
-            PasswordType.MAIN -> preferencesDataStore.resetFailedUnlockCount()
+            PasswordType.MAIN -> {
+                preferencesDataStore.resetFailedUnlockCount()
+                unlockApp()
+            }
             PasswordType.DURESS_1,
             PasswordType.DURESS_2,
             PasswordType.DURESS_3 -> {
-                actionExecutor.executeActions(result.actions, EventSource.DURESS_PASSWORD)
+                preferencesDataStore.resetFailedUnlockCount()
+                unlockApp()
+                val actions = result.actions
+                val duressType = result.type
+                applicationScope.launch {
+                    actionExecutor.executeActions(
+                        actions = actions,
+                        source = EventSource.DURESS_PASSWORD,
+                        duressType = duressType
+                    )
+                }
             }
         }
         return result

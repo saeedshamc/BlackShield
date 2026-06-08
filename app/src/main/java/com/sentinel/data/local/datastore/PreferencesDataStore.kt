@@ -35,6 +35,7 @@ class PreferencesDataStore @Inject constructor(
         val LOG_RETENTION_DAYS = intPreferencesKey("log_retention_days")
         val FAILED_UNLOCK_COUNT = intPreferencesKey("failed_unlock_count")
         val APP_LANGUAGE = stringPreferencesKey(Constants.KEY_APP_LANGUAGE)
+        val APP_UNLOCKED = booleanPreferencesKey("app_unlocked")
     }
 
     val activeProfileId: Flow<Long> = context.dataStore.data.map {
@@ -58,6 +59,10 @@ class PreferencesDataStore @Inject constructor(
         it[Keys.FAILED_UNLOCK_COUNT] ?: 0
     }
 
+    val isAppUnlocked: Flow<Boolean> = context.dataStore.data.map {
+        it[Keys.APP_UNLOCKED] ?: false
+    }
+
     val appLanguage: Flow<AppLanguage> = context.dataStore.data.map { prefs ->
         prefs[Keys.APP_LANGUAGE]?.let { AppLanguage.fromCode(it) }
             ?: LocaleManager.currentLanguage(context)
@@ -74,6 +79,8 @@ class PreferencesDataStore @Inject constructor(
     }
     suspend fun resetFailedUnlockCount() = edit { it[Keys.FAILED_UNLOCK_COUNT] = 0 }
     suspend fun setAppLanguage(language: AppLanguage) = edit { it[Keys.APP_LANGUAGE] = language.code }
+    suspend fun setAppUnlocked(unlocked: Boolean) = edit { it[Keys.APP_UNLOCKED] = unlocked }
+    suspend fun lockApp() = setAppUnlocked(false)
 
     private suspend fun edit(transform: suspend (MutablePreferences) -> Unit) {
         context.dataStore.edit { transform(it) }

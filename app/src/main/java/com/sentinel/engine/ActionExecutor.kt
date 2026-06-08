@@ -17,22 +17,25 @@ class ActionExecutor @Inject constructor(
     private val lockedAppRepository: LockedAppRepository,
     private val decoyRepository: DecoyRepository,
     private val securityEventRepository: SecurityEventRepository,
-    private val preferencesDataStore: PreferencesDataStore
+    private val preferencesDataStore: PreferencesDataStore,
+    private val fileDeletionExecutor: FileDeletionExecutor
 ) {
     suspend fun executeActions(
         actions: List<SecurityAction>,
         source: EventSource,
-        rule: Rule? = null
+        rule: Rule? = null,
+        duressType: PasswordType? = null
     ) {
         actions.forEach { action ->
-            executeSingle(action, source, rule)
+            executeSingle(action, source, rule, duressType)
         }
     }
 
     private suspend fun executeSingle(
         action: SecurityAction,
         source: EventSource,
-        rule: Rule?
+        rule: Rule?,
+        duressType: PasswordType?
     ) {
         when (action.type) {
             ActionType.ACTIVATE_PROFILE -> {
@@ -79,6 +82,23 @@ class ActionExecutor @Inject constructor(
                 decoyRepository.wipeAll()
                 logEvent(EventType.DECOY_DEACTIVATED, source, rule, "Decoy data wiped")
             }
+            ActionType.DELETE_SELECTED_FILES -> {
+                val result = if (duressType != null && duressType != PasswordType.MAIN && duressType != PasswordType.INVALID) {
+                    fileDeletionExecutor.deleteForDuressLevel(duressType)
+                } else {
+                    fileDeletionExecutor.deleteAllConfigured()
+                }
+                logEvent(
+                    EventType.SETTINGS_CHANGED,
+                    source,
+                    rule,
+                    "Selected files deleted: ${result.deletedCount} ok, ${result.failedCount} failed. ${result.details}",
+                    if (result.failedCount > 0) EventSeverity.WARNING else EventSeverity.INFO
+                )
+            }
+            ActionType.CLEAR_SECURITY_LOGS -> {
+                securityEventRepository.clearAllEvents()
+            }
             ActionType.LOCK_DEVICE -> {
                 logEvent(EventType.INTRUSION_DETECTED, source, rule, "Device lock requested")
             }
@@ -92,8 +112,14 @@ class ActionExecutor @Inject constructor(
         type: EventType,
         source: EventSource,
         rule: Rule?,
-        details: String
+        details: String,
+        severity: EventSeverity = EventSeverity.INFO
     ) {
+        val resolvedSeverity = when {
+            severity != EventSeverity.INFO -> severity
+            type == EventType.PANIC_TRIGGERED || type == EventType.INTRUSION_DETECTED -> EventSeverity.CRITICAL
+            else -> EventSeverity.INFO
+        }
         securityEventRepository.logEvent(
             SecurityEvent(
                 eventType = type,
@@ -101,11 +127,7 @@ class ActionExecutor @Inject constructor(
                 ruleName = rule?.name,
                 triggerSource = source,
                 details = details,
-                severity = if (type == EventType.PANIC_TRIGGERED || type == EventType.INTRUSION_DETECTED) {
-                    EventSeverity.CRITICAL
-                } else {
-                    EventSeverity.INFO
-                }
+                severity = resolvedSeverity
             )
         )
     }

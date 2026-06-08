@@ -3,6 +3,8 @@ package com.sentinel.ui.rules
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -15,8 +17,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sentinel.R
+import com.sentinel.domain.model.ActionType
+import com.sentinel.domain.model.DuressActionCatalog
+import com.sentinel.domain.model.ProfileType
+import com.sentinel.domain.model.TriggerType
 import com.sentinel.ui.components.SentinelCard
 import com.sentinel.ui.components.SentinelTopBar
+import com.sentinel.ui.util.ActionLabels
 
 @Composable
 fun RuleListScreen(
@@ -56,12 +63,15 @@ fun RuleListScreen(
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(rule.name, style = MaterialTheme.typography.titleMedium)
+                                val triggerName = ActionLabels.triggerName(rule.trigger.type)
+                                val actionNames = buildString {
+                                    rule.actions.forEachIndexed { index, action ->
+                                        if (index > 0) append(", ")
+                                        append(stringResource(ActionLabels.actionLabel(action.type)))
+                                    }
+                                }
                                 Text(
-                                    stringResource(
-                                        R.string.rule_format,
-                                        rule.trigger.type.name,
-                                        rule.actions.firstOrNull()?.type?.name ?: "NONE"
-                                    ),
+                                    stringResource(R.string.rule_format, triggerName, actionNames),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -90,7 +100,7 @@ fun RuleBuilderScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     var triggerExpanded by remember { mutableStateOf(false) }
-    var actionExpanded by remember { mutableStateOf(false) }
+    var addActionExpanded by remember { mutableStateOf(false) }
 
     LaunchedEffect(ruleId) { viewModel.loadRule(ruleId) }
 
@@ -100,7 +110,11 @@ fun RuleBuilderScreen(
         topBar = { SentinelTopBar(title, onNavigateBack) }
     ) { padding ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             OutlinedTextField(
@@ -120,23 +134,23 @@ fun RuleBuilderScreen(
             Text(stringResource(R.string.trigger_if), style = MaterialTheme.typography.titleSmall)
             ExposedDropdownMenuBox(expanded = triggerExpanded, onExpandedChange = { triggerExpanded = it }) {
                 OutlinedTextField(
-                    value = state.triggerType.name,
+                    value = ActionLabels.triggerName(state.triggerType),
                     onValueChange = {},
                     readOnly = true,
                     modifier = Modifier.menuAnchor().fillMaxWidth(),
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(triggerExpanded) }
                 )
                 ExposedDropdownMenu(expanded = triggerExpanded, onDismissRequest = { triggerExpanded = false }) {
-                    com.sentinel.domain.model.TriggerType.entries.forEach { type ->
+                    TriggerType.entries.forEach { type ->
                         DropdownMenuItem(
-                            text = { Text(type.name) },
+                            text = { Text(ActionLabels.triggerName(type)) },
                             onClick = { viewModel.updateTriggerType(type); triggerExpanded = false }
                         )
                     }
                 }
             }
 
-            if (state.triggerType.name.contains("ATTEMPT") || state.triggerType.name.contains("PRESS")) {
+            if (state.triggerType in RuleBuilderViewModel.thresholdTriggers) {
                 OutlinedTextField(
                     value = state.triggerThreshold.toString(),
                     onValueChange = { viewModel.updateThreshold(it.toIntOrNull() ?: 5) },
@@ -145,31 +159,82 @@ fun RuleBuilderScreen(
                 )
             }
 
-            Text(stringResource(R.string.action_then), style = MaterialTheme.typography.titleSmall)
-            ExposedDropdownMenuBox(expanded = actionExpanded, onExpandedChange = { actionExpanded = it }) {
-                OutlinedTextField(
-                    value = state.actionType.name,
-                    onValueChange = {},
-                    readOnly = true,
-                    modifier = Modifier.menuAnchor().fillMaxWidth(),
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(actionExpanded) }
-                )
-                ExposedDropdownMenu(expanded = actionExpanded, onDismissRequest = { actionExpanded = false }) {
-                    com.sentinel.domain.model.ActionType.entries.forEach { type ->
+            Text(stringResource(R.string.actions_then), style = MaterialTheme.typography.titleSmall)
+            Text(
+                stringResource(R.string.actions_then_desc),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            state.actions.forEachIndexed { index, action ->
+                SentinelCard {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            ActionLabels.actionName(action.type),
+                            style = MaterialTheme.typography.titleSmall,
+                            modifier = Modifier.weight(1f)
+                        )
+                        if (state.actions.size > 1) {
+                            IconButton(onClick = { viewModel.removeAction(index) }) {
+                                Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.cancel))
+                            }
+                        }
+                    }
+                    if (action.type == ActionType.ACTIVATE_PROFILE) {
+                        Spacer(Modifier.height(8.dp))
+                        Text(stringResource(R.string.select_profile), style = MaterialTheme.typography.labelMedium)
+                        ProfileType.entries.filter { it != ProfileType.CUSTOM }.forEach { type ->
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                RadioButton(
+                                    selected = action.profileType == type.name,
+                                    onClick = { viewModel.updateActionProfile(index, type.name) }
+                                )
+                                Text(type.name)
+                            }
+                        }
+                    }
+                }
+            }
+
+            ExposedDropdownMenuBox(expanded = addActionExpanded, onExpandedChange = { addActionExpanded = it }) {
+                OutlinedButton(
+                    onClick = { addActionExpanded = true },
+                    modifier = Modifier.menuAnchor().fillMaxWidth()
+                ) {
+                    Icon(Icons.Default.Add, null)
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.add_action))
+                }
+                ExposedDropdownMenu(expanded = addActionExpanded, onDismissRequest = { addActionExpanded = false }) {
+                    DuressActionCatalog.availableActions.forEach { item ->
                         DropdownMenuItem(
-                            text = { Text(type.name) },
-                            onClick = { viewModel.updateActionType(type); actionExpanded = false }
+                            text = { Text(ActionLabels.actionName(item.type)) },
+                            onClick = {
+                                viewModel.addAction(item.type)
+                                addActionExpanded = false
+                            }
+                        )
+                    }
+                    ActionType.LOG_EVENT.let { type ->
+                        DropdownMenuItem(
+                            text = { Text(ActionLabels.actionName(type)) },
+                            onClick = {
+                                viewModel.addAction(type)
+                                addActionExpanded = false
+                            }
                         )
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.weight(1f))
-
             Button(
                 onClick = { viewModel.save(onNavigateBack) },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = state.name.isNotBlank()
+                enabled = state.name.isNotBlank() && state.actions.isNotEmpty()
             ) {
                 Text(stringResource(R.string.save_rule))
             }

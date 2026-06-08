@@ -66,9 +66,9 @@ fun PanicCenterScreen(
 
             lastActionKey?.let { key ->
                 val message = when (key) {
-                    "action_emergency_profile" -> stringResource(R.string.action_emergency_profile)
-                    "action_lock_apps" -> stringResource(R.string.action_lock_apps)
-                    "action_decoy" -> stringResource(R.string.action_decoy)
+                    "action_emergency_profile" -> stringResource(R.string.panic_result_emergency_profile)
+                    "action_lock_apps" -> stringResource(R.string.panic_result_lock_apps)
+                    "action_decoy" -> stringResource(R.string.panic_result_decoy)
                     "action_notifications" -> stringResource(R.string.action_notifications)
                     "action_full_panic" -> stringResource(R.string.action_full_panic)
                     else -> key

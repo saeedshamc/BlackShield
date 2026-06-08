@@ -26,7 +26,13 @@ class SecurityEventRepository @Inject constructor(
         logDao.insert(event.toEntity())
 
     suspend fun purgeOldEvents(retentionDays: Int) {
-        val cutoff = System.currentTimeMillis() - (retentionDays * 24L * 60 * 60 * 1000)
-        logDao.deleteOlderThan(cutoff)
+        if (retentionDays <= 0) {
+            logDao.deleteAll()
+        } else {
+            val cutoff = System.currentTimeMillis() - (retentionDays * 24L * 60 * 60 * 1000)
+            logDao.deleteOlderThan(cutoff)
+        }
     }
+
+    suspend fun clearAllEvents() = logDao.deleteAll()
 }

@@ -35,3 +35,11 @@ data class PasswordVerificationResult(
     val type: PasswordType,
     val actions: List<SecurityAction> = emptyList()
 )
+
+enum class PasswordValidationError {
+    TOO_SHORT,
+    SAME_AS_MAIN,
+    SAME_AS_OTHER_DURESS,
+    REQUIRED,
+    NO_ACTIONS
+}

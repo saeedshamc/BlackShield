@@ -72,16 +72,59 @@ class PasswordRepository @Inject constructor(
         securePreferences.putString("duress${index}_actions", JsonUtil.toJson(actions))
     }
 
+    fun isMainPasswordSet(): Boolean =
+        securePreferences.getString(Constants.KEY_MAIN_PASSWORD_HASH).isNotEmpty()
+
+    fun isDuressPasswordSet(index: Int): Boolean = when (index) {
+        1 -> securePreferences.getString(Constants.KEY_DURESS_PASSWORD_1_HASH).isNotEmpty()
+        2 -> securePreferences.getString(Constants.KEY_DURESS_PASSWORD_2_HASH).isNotEmpty()
+        3 -> securePreferences.getString(Constants.KEY_DURESS_PASSWORD_3_HASH).isNotEmpty()
+        else -> false
+    }
+
+    fun validateNewPassword(
+        plainPassword: String,
+        forDuressIndex: Int? = null
+    ): PasswordValidationError? {
+        if (plainPassword.length < 4) return PasswordValidationError.TOO_SHORT
+        val config = getPasswordConfig()
+        if (forDuressIndex != null) {
+            if (config.mainPasswordHash.isNotEmpty() &&
+                cryptoManager.verifyPassword(plainPassword, config.mainPasswordHash)
+            ) {
+                return PasswordValidationError.SAME_AS_MAIN
+            }
+        }
+        val duressHashes = listOf(
+            1 to config.duressPassword1Hash,
+            2 to config.duressPassword2Hash,
+            3 to config.duressPassword3Hash
+        ).filter { (index, hash) ->
+            hash.isNotEmpty() && index != forDuressIndex
+        }
+        if (duressHashes.any { (_, hash) ->
+                cryptoManager.verifyPassword(plainPassword, hash)
+            }
+        ) {
+            return PasswordValidationError.SAME_AS_OTHER_DURESS
+        }
+        return null
+    }
+
     fun verifyPassword(password: String): PasswordVerificationResult {
         val config = getPasswordConfig()
         return when {
-            cryptoManager.verifyPassword(password, config.mainPasswordHash) ->
+            config.mainPasswordHash.isNotEmpty() &&
+                cryptoManager.verifyPassword(password, config.mainPasswordHash) ->
                 PasswordVerificationResult(PasswordType.MAIN)
-            cryptoManager.verifyPassword(password, config.duressPassword1Hash) ->
+            config.duressPassword1Hash.isNotEmpty() &&
+                cryptoManager.verifyPassword(password, config.duressPassword1Hash) ->
                 PasswordVerificationResult(PasswordType.DURESS_1, config.duress1Actions)
-            cryptoManager.verifyPassword(password, config.duressPassword2Hash) ->
+            config.duressPassword2Hash.isNotEmpty() &&
+                cryptoManager.verifyPassword(password, config.duressPassword2Hash) ->
                 PasswordVerificationResult(PasswordType.DURESS_2, config.duress2Actions)
-            cryptoManager.verifyPassword(password, config.duressPassword3Hash) ->
+            config.duressPassword3Hash.isNotEmpty() &&
+                cryptoManager.verifyPassword(password, config.duressPassword3Hash) ->
                 PasswordVerificationResult(PasswordType.DURESS_3, config.duress3Actions)
             else -> PasswordVerificationResult(PasswordType.INVALID)
         }

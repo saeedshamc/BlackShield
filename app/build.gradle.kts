@@ -92,4 +92,5 @@ dependencies {
     implementation(libs.security.crypto)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.gson)
+    implementation(libs.androidx.documentfile)
 }

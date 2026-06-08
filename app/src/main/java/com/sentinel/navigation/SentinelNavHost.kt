@@ -19,7 +19,7 @@ import com.sentinel.ui.profiles.ProfileManagerScreen
 import com.sentinel.ui.rules.RuleBuilderScreen
 import com.sentinel.ui.rules.RuleListScreen
 import com.sentinel.ui.settings.BackupScreen
-import com.sentinel.ui.settings.DuressPasswordScreen
+import com.sentinel.ui.settings.DuressConfigScreen
 import com.sentinel.ui.settings.SettingsScreen
 
 @Composable
@@ -92,7 +92,7 @@ fun SentinelNavHost(modifier: Modifier = Modifier) {
             )
         }
         composable(SentinelRoutes.DURESS_PASSWORD) {
-            DuressPasswordScreen(onNavigateBack = { navController.popBackStack() })
+            DuressConfigScreen(onNavigateBack = { navController.popBackStack() })
         }
         composable(SentinelRoutes.BACKUP) {
             BackupScreen(onNavigateBack = { navController.popBackStack() })

@@ -58,6 +58,40 @@
     <string name="threshold_count">Threshold / Count</string>
     <string name="save_rule">Save Rule</string>
     <string name="rule_format">IF %1$s → %2$s</string>
+    <string name="actions_then">Actions (THEN)</string>
+    <string name="actions_then_desc">Select one or more actions to run when the trigger fires.</string>
+    <string name="add_action">Add Action</string>
+    <string name="select_profile">Select Profile</string>
+
+    <!-- Triggers -->
+    <string name="trigger_wrong_password">Wrong password attempts</string>
+    <string name="trigger_power_button">Power button press</string>
+    <string name="trigger_volume_combo">Volume button combo</string>
+    <string name="trigger_secret_pin">Secret PIN entered</string>
+    <string name="trigger_sim_changed">SIM card changed</string>
+    <string name="trigger_app_opened">App opened</string>
+    <string name="trigger_screen_off">Screen turned off</string>
+    <string name="trigger_screen_on">Screen turned on</string>
+    <string name="trigger_unlock_failure">Unlock failure</string>
+    <string name="trigger_accessibility_disabled">Accessibility disabled</string>
+    <string name="trigger_device_admin_removed">Device admin removed</string>
+    <string name="trigger_custom_gesture">Custom gesture</string>
+    <string name="trigger_time_based">Time-based</string>
+    <string name="trigger_manual">Manual</string>
+
+    <!-- Actions -->
+    <string name="action_activate_profile">Activate profile</string>
+    <string name="action_lock_apps">Lock all apps</string>
+    <string name="action_hide_apps">Hide apps</string>
+    <string name="action_activate_decoy">Activate decoy mode</string>
+    <string name="action_emergency">Execute emergency actions</string>
+    <string name="action_disable_notifications">Disable notifications</string>
+    <string name="action_log_event">Log event</string>
+    <string name="action_wipe_decoy">Wipe decoy data</string>
+    <string name="action_delete_files">Delete selected files</string>
+    <string name="action_clear_logs">Clear security logs</string>
+    <string name="action_lock_device">Lock device</string>
+    <string name="action_custom">Custom action</string>
 
     <!-- Decoy -->
     <string name="decoy_mode">Decoy Mode</string>
@@ -96,9 +130,9 @@
     <string name="method_power_volume">Power + Volume Up</string>
     <string name="method_gesture">Secret Gesture</string>
     <string name="last_action">Last action: %1$s</string>
-    <string name="action_emergency_profile">Emergency profile activated</string>
-    <string name="action_lock_apps">All apps locked</string>
-    <string name="action_decoy">Decoy mode activated</string>
+    <string name="panic_result_emergency_profile">Emergency profile activated</string>
+    <string name="panic_result_lock_apps">All apps locked</string>
+    <string name="panic_result_decoy">Decoy mode activated</string>
     <string name="action_notifications">Notifications suppressed</string>
     <string name="action_full_panic">Full panic sequence executed</string>
 
@@ -134,6 +168,46 @@
     <string name="password_too_short">Password must be at least 4 characters</string>
     <string name="main_password_saved">Main password saved</string>
     <string name="duress_password_saved">Duress password %1$d saved</string>
+    <string name="duress_config_saved">Duress password and actions saved</string>
+    <string name="save_duress_config">Save duress %1$d (password + actions)</string>
+    <string name="duress_keep_password_hint">Leave password empty to keep the current one — only actions will update.</string>
+    <string name="duress_change_password">New password (optional)</string>
+    <string name="duress_password_required">Enter a duress password (min. 4 characters)</string>
+    <string name="duress_actions_required">Select at least one action</string>
+    <string name="main_password_required_first">Set a main password first — duress passwords only work after that.</string>
+    <string name="password_same_as_main">Duress password must be different from the main password</string>
+    <string name="password_same_as_other_duress">Password must be different from other duress passwords</string>
+    <string name="pick_files">Pick files</string>
+    <string name="pick_folder">Pick folder</string>
+    <string name="files_for_this_duress">Files deleted with this duress password:</string>
+    <string name="no_files_for_duress">No files selected — tap Pick files or Pick folder</string>
+    <string name="file_added_success">File added to deletion list</string>
+    <string name="file_label">File</string>
+    <string name="folder_label">Folder</string>
+    <string name="duress_level">Duress Password %1$d</string>
+    <string name="duress_short">D%1$d</string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="main_password_set_hint">Main password is set. Enter a new one to change it.</string>
+    <string name="duress_password_set_hint">Duress %1$d is set. Enter a new password to change it.</string>
+    <string name="duress_actions_label">Actions on duress unlock</string>
+    <string name="duress_unlock_hint">Phone opens normally, but selected actions run silently in the background.</string>
+    <string name="destructive_action">Destructive — cannot be undone</string>
+    <string name="sensitive_files_title">Files to delete on duress</string>
+    <string name="sensitive_files_desc">Only these files/folders are deleted — never the entire phone.</string>
+    <string name="add_sensitive_file">Add file or folder</string>
+    <string name="no_sensitive_files">No files configured. Add paths you want deleted on duress unlock.</string>
+    <string name="file_display_name">Display name</string>
+    <string name="file_path">Full path</string>
+    <string name="sensitive_file_path_hint">Enter the full path (e.g. /storage/emulated/0/Documents/secret.pdf)</string>
+
+    <!-- Unlock -->
+    <string name="unlock_title">Unlock Sentinel</string>
+    <string name="unlock_subtitle">Enter your password to continue</string>
+    <string name="unlock_password_label">Password</string>
+    <string name="unlock_button">Unlock</string>
+    <string name="unlock_error_empty">Please enter your password</string>
+    <string name="unlock_error_invalid">Incorrect password</string>
+    <string name="unlock_duress_hint">Duress passwords also unlock the app and run configured actions silently.</string>
 
     <!-- Backup -->
     <string name="backup_desc">Export and import encrypted settings. All data stays on-device.</string>

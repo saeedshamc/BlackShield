@@ -43,9 +43,13 @@ class RuleBuilderViewModel @Inject constructor(
                     name = rule.name,
                     description = rule.description,
                     triggerType = rule.trigger.type,
-                    triggerThreshold = rule.trigger.intParam("threshold", 5),
-                    actionType = rule.actions.firstOrNull()?.type ?: ActionType.LOG_EVENT,
-                    profileType = rule.actions.firstOrNull()?.parameters["profileType"] ?: "EMERGENCY",
+                    triggerThreshold = rule.trigger.intParam("threshold", rule.trigger.intParam("count", 5)),
+                    actions = rule.actions.map { action ->
+                        RuleActionItem(
+                            type = action.type,
+                            profileType = action.parameters["profileType"] ?: "EMERGENCY"
+                        )
+                    }.ifEmpty { listOf(RuleActionItem(ActionType.LOG_EVENT)) },
                     enabled = rule.enabled,
                     priority = rule.priority
                 )
@@ -56,13 +60,34 @@ class RuleBuilderViewModel @Inject constructor(
     fun updateName(name: String) { _uiState.update { it.copy(name = name) } }
     fun updateDescription(desc: String) { _uiState.update { it.copy(description = desc) } }
     fun updateTriggerType(type: TriggerType) { _uiState.update { it.copy(triggerType = type) } }
-    fun updateActionType(type: ActionType) { _uiState.update { it.copy(actionType = type) } }
     fun updateThreshold(value: Int) { _uiState.update { it.copy(triggerThreshold = value) } }
+
+    fun addAction(type: ActionType) {
+        _uiState.update { state ->
+            if (state.actions.any { it.type == type }) state
+            else state.copy(actions = state.actions + RuleActionItem(type))
+        }
+    }
+
+    fun removeAction(index: Int) {
+        _uiState.update { state ->
+            if (state.actions.size <= 1) state
+            else state.copy(actions = state.actions.filterIndexed { i, _ -> i != index })
+        }
+    }
+
+    fun updateActionProfile(index: Int, profile: String) {
+        _uiState.update { state ->
+            state.copy(actions = state.actions.mapIndexed { i, item ->
+                if (i == index) item.copy(profileType = profile) else item
+            })
+        }
+    }
 
     fun save(onSaved: () -> Unit) {
         viewModelScope.launch {
             val state = _uiState.value
-            if (state.name.isBlank()) return@launch
+            if (state.name.isBlank() || state.actions.isEmpty()) return@launch
 
             val rule = Rule(
                 id = state.id,
@@ -72,7 +97,7 @@ class RuleBuilderViewModel @Inject constructor(
                 priority = state.priority,
                 trigger = buildTrigger(state),
                 conditions = emptyList(),
-                actions = listOf(buildAction(state))
+                actions = state.actions.map { buildAction(it) }
             )
             saveRule(rule)
             onSaved()
@@ -87,12 +112,25 @@ class RuleBuilderViewModel @Inject constructor(
         else -> Trigger(state.triggerType)
     }
 
-    private fun buildAction(state: RuleBuilderState): SecurityAction = when (state.actionType) {
+    private fun buildAction(item: RuleActionItem): SecurityAction = when (item.type) {
         ActionType.ACTIVATE_PROFILE ->
-            SecurityAction(state.actionType, mapOf("profileType" to state.profileType))
-        else -> SecurityAction(state.actionType)
+            SecurityAction(item.type, mapOf("profileType" to item.profileType))
+        else -> SecurityAction(item.type)
+    }
+
+    companion object {
+        val thresholdTriggers = setOf(
+            TriggerType.WRONG_PASSWORD_ATTEMPTS,
+            TriggerType.UNLOCK_FAILURE,
+            TriggerType.POWER_BUTTON_PRESS
+        )
     }
 }
+
+data class RuleActionItem(
+    val type: ActionType,
+    val profileType: String = "EMERGENCY"
+)
 
 data class RuleBuilderState(
     val id: Long = 0,
@@ -100,8 +138,7 @@ data class RuleBuilderState(
     val description: String = "",
     val triggerType: TriggerType = TriggerType.WRONG_PASSWORD_ATTEMPTS,
     val triggerThreshold: Int = 5,
-    val actionType: ActionType = ActionType.LOCK_APPLICATIONS,
-    val profileType: String = "EMERGENCY",
+    val actions: List<RuleActionItem> = listOf(RuleActionItem(ActionType.LOCK_APPLICATIONS)),
     val enabled: Boolean = true,
     val priority: Int = 0
 )
