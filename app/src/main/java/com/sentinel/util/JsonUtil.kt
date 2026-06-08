@@ -8,8 +8,11 @@ object JsonUtil {
 
     fun toJson(obj: Any?): String = gson.toJson(obj)
 
+    fun <T> fromJson(json: String, type: java.lang.reflect.Type): T =
+        gson.fromJson(json, type)
+
     inline fun <reified T> fromJson(json: String): T =
-        gson.fromJson(json, object : TypeToken<T>() {}.type)
+        fromJson(json, object : TypeToken<T>() {}.type)
 
     inline fun <reified T> fromJsonOrNull(json: String?): T? {
         if (json.isNullOrBlank()) return null

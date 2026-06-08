@@ -14,15 +14,15 @@ import javax.inject.Inject
 @HiltViewModel
 class RuleListViewModel @Inject constructor(
     observeRules: ObserveRulesUseCase,
-    private val deleteRule: DeleteRuleUseCase,
-    private val toggleRule: ToggleRuleUseCase
+    private val deleteRuleUseCase: DeleteRuleUseCase,
+    private val toggleRuleUseCase: ToggleRuleUseCase
 ) : ViewModel() {
 
     val rules: StateFlow<List<Rule>> = observeRules()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    fun deleteRule(id: Long) = viewModelScope.launch { deleteRule(id) }
-    fun toggleRule(id: Long, enabled: Boolean) = viewModelScope.launch { toggleRule(id, enabled) }
+    fun deleteRule(id: Long) = viewModelScope.launch { deleteRuleUseCase(id) }
+    fun toggleRule(id: Long, enabled: Boolean) = viewModelScope.launch { toggleRuleUseCase(id, enabled) }
 }
 
 @HiltViewModel

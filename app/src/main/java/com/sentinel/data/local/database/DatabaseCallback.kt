@@ -8,9 +8,7 @@ import com.sentinel.domain.model.*
 /**
  * Seeds default emergency profiles and sample decoy content on first launch.
  */
-class DatabaseCallback(
-    private val scope: CoroutineScope
-) : RoomDatabase.Callback() {
+class DatabaseCallback : RoomDatabase.Callback() {
 
     override fun onCreate(db: SupportSQLiteDatabase) {
         super.onCreate(db)
