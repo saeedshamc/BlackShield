@@ -8,6 +8,7 @@ import com.sentinel.data.repository.PasswordRepository
 import com.sentinel.domain.usecase.decoy.EnsureDecoyDefaultsUseCase
 import com.sentinel.domain.usecase.profile.EnsureDefaultProfilesUseCase
 import com.sentinel.domain.usecase.security.LockAppUseCase
+import com.sentinel.service.lock.DeviceLockServiceManager
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -22,6 +23,7 @@ class SentinelApplication : Application(), Configuration.Provider {
     @Inject lateinit var ensureDecoyDefaults: EnsureDecoyDefaultsUseCase
     @Inject lateinit var lockApp: LockAppUseCase
     @Inject lateinit var passwordRepository: PasswordRepository
+    @Inject lateinit var deviceLockServiceManager: DeviceLockServiceManager
 
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder()
@@ -37,6 +39,7 @@ class SentinelApplication : Application(), Configuration.Provider {
             if (passwordRepository.isAnyPasswordSet()) {
                 lockApp()
             }
+            deviceLockServiceManager.syncServiceState()
         }
     }
 }

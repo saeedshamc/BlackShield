@@ -32,6 +32,7 @@ fun SettingsScreen(
     val context = LocalContext.current
     val activity = context as? ComponentActivity
     val language by viewModel.appLanguage.collectAsStateWithLifecycle()
+    val deviceLockEnabled by viewModel.deviceLockEnabled.collectAsStateWithLifecycle()
 
     Scaffold(topBar = { SentinelTopBar(stringResource(R.string.settings), onNavigateBack) }) { padding ->
         Column(
@@ -60,6 +61,26 @@ fun SettingsScreen(
             SettingsItem(stringResource(R.string.user_guide), Icons.Default.MenuBook, SentinelRoutes.USER_GUIDE, onNavigate)
 
             SectionHeader(stringResource(R.string.section_security))
+            SentinelCard {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(stringResource(R.string.device_lock_settings), style = MaterialTheme.typography.titleSmall)
+                        Text(
+                            stringResource(R.string.device_lock_settings_desc),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Switch(
+                        checked = deviceLockEnabled,
+                        onCheckedChange = viewModel::setDeviceLockEnabled
+                    )
+                }
+            }
             SettingsItem(stringResource(R.string.duress_passwords), Icons.Default.Password, SentinelRoutes.DURESS_PASSWORD, onNavigate)
             SettingsItem(stringResource(R.string.backup_restore), Icons.Default.Backup, SentinelRoutes.BACKUP, onNavigate)
 

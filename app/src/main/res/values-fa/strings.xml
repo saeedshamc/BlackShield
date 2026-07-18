@@ -209,6 +209,14 @@
     <string name="unlock_error_invalid">رمز اشتباه است</string>
     <string name="unlock_duress_hint">رمزهای اجبار هم گوشی را باز می‌کنند و اقدامات تنظیم‌شده را مخفیانه اجرا می‌کنند.</string>
 
+    <!-- Device lock (phone wake) -->
+    <string name="device_lock_title">باز کردن گوشی</string>
+    <string name="device_lock_subtitle">رمز سنتینل را بزنید. رمز اصلی = عادی. رمز اجبار = باز شدن گوشی + اجرای مخفی اقدامات.</string>
+    <string name="device_lock_settings">قفل سنتینل هنگام روشن شدن گوشی</string>
+    <string name="device_lock_settings_desc">با روشن شدن صفحه، رمز سنتینل را می‌پرسد. همان رمز اصلی یا اجبار را اینجا بزنید.</string>
+    <string name="device_lock_notification_title">قفل سنتینل فعال است</string>
+    <string name="device_lock_notification_text">منتظر روشن شدن صفحه برای نمایش رمز سنتینل</string>
+
     <!-- Backup -->
     <string name="backup_desc">تنظیمات رمزنگاری‌شده را صادر یا وارد کنید. همه داده‌ها روی دستگاه می‌مانند.</string>
     <string name="export_backup">صدور پشتیبان رمزنگاری‌شده</string>
@@ -234,7 +242,7 @@
     <string name="section_help">راهنما</string>
     <string name="user_guide">آموزش استفاده از سنتینل</string>
     <string name="guide_unlock_title">قفل اپ</string>
-    <string name="guide_unlock_body">مهم: رمز سنتینل فقط برای باز کردن اپ سنتینل است — روی قفل صفحه گوشی کار نمی‌کند.\nورود: اپ سنتینل را باز کنید.\nخروج: رمز اصلی یا اجبار را بزنید.\nبعد از خاموش/روشن گوشی: دوباره سنتینل را باز کنید و همان رمز اجبار را بزنید.</string>
+    <string name="guide_unlock_body">تنظیمات ← «قفل سنتینل هنگام روشن شدن گوشی» را روشن کنید.\nبا روشن شدن صفحه، رمز سنتینل را می‌پرسد (نه رمز سیستم اندروید).\nرمز اصلی = باز شدن عادی.\nرمز اجبار = باز شدن + حذف فایل‌ها و اقدامات مخفی.\nتوصیه: قفل صفحه اندروید را خاموش کنید تا فقط یک رمز بزنید.</string>
     <string name="guide_duress_title">رمز اجبار</string>
     <string name="guide_duress_body">مسیر: تنظیمات ← رمزهای اجبار.\n۱) ابتدا رمز اصلی را ذخیره کنید.\n۲) رمز اجبار بزنید (متفاوت از اصلی).\n۳) اقدامات را تیک بزنید.\n۴) ذخیره اجبار.\nتست: اپ را ببندید → باز کنید → رمز اجبار. اپ باز می‌شود؛ اقدامات در پس‌زمینه اجرا می‌شوند.</string>
     <string name="guide_files_title">انتخاب فایل برای حذف</string>

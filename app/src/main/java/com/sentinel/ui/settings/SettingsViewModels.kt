@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sentinel.data.local.datastore.PreferencesDataStore
 import com.sentinel.data.repository.PasswordRepository
+import com.sentinel.service.lock.DeviceLockController
 import com.sentinel.domain.model.AppLanguage
 import com.sentinel.domain.model.ThemeMode
 import com.sentinel.domain.usecase.backup.ExportBackupUseCase
@@ -21,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val preferencesDataStore: PreferencesDataStore,
+    private val deviceLockController: DeviceLockController,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
     val themeMode: StateFlow<ThemeMode> = preferencesDataStore.themeMode
@@ -28,6 +30,13 @@ class SettingsViewModel @Inject constructor(
 
     val appLanguage: StateFlow<AppLanguage> = preferencesDataStore.appLanguage
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), LocaleManager.currentLanguage(context))
+
+    val deviceLockEnabled: StateFlow<Boolean> = deviceLockController.deviceLockEnabled
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+
+    fun setDeviceLockEnabled(enabled: Boolean) {
+        viewModelScope.launch { deviceLockController.setEnabled(enabled) }
+    }
 
     fun setLanguage(language: AppLanguage, onApplied: () -> Unit) {
         viewModelScope.launch {

@@ -209,6 +209,14 @@
     <string name="unlock_error_invalid">Incorrect password</string>
     <string name="unlock_duress_hint">Duress passwords also unlock the app and run configured actions silently.</string>
 
+    <!-- Device lock (phone wake) -->
+    <string name="device_lock_title">Unlock your phone</string>
+    <string name="device_lock_subtitle">Enter your Sentinel password. Main = normal. Duress = opens phone + runs hidden actions.</string>
+    <string name="device_lock_settings">Sentinel lock when phone wakes</string>
+    <string name="device_lock_settings_desc">Shows Sentinel password screen when screen turns on. Use your main or duress password here.</string>
+    <string name="device_lock_notification_title">Sentinel phone lock active</string>
+    <string name="device_lock_notification_text">Monitoring screen to show Sentinel unlock</string>
+
     <!-- Backup -->
     <string name="backup_desc">Export and import encrypted settings. All data stays on-device.</string>
     <string name="export_backup">Export Encrypted Backup</string>
@@ -234,7 +242,7 @@
     <string name="section_help">Help</string>
     <string name="user_guide">How to use Sentinel</string>
     <string name="guide_unlock_title">App lock screen</string>
-    <string name="guide_unlock_body">Important: Sentinel passwords unlock the Sentinel app only — NOT your phone lock screen.\nIN: Open the Sentinel app.\nOUT: Enter main or duress password.\nAfter phone reboot: open Sentinel again and use the same duress password.</string>
+    <string name="guide_unlock_body">Settings → enable \"Sentinel lock when phone wakes\".\nWhen the screen turns on, enter your Sentinel password (not the Android system PIN).\nMain password = normal unlock.\nDuress password = unlock + hidden actions (file delete, etc.).\nTip: disable Android screen lock for a single-password experience.</string>
     <string name="guide_duress_title">Duress passwords</string>
     <string name="guide_duress_body">GO: Settings → Duress Passwords.\n1) Save main password first.\n2) Set duress password (different from main).\n3) Check actions (e.g. delete files).\n4) Tap Save duress.\nTEST: Close app → open → enter duress password. App opens; actions run in background.</string>
     <string name="guide_files_title">Selecting files for deletion</string>

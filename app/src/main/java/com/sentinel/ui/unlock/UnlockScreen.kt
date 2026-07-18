@@ -18,6 +18,7 @@ import com.sentinel.R
 @Composable
 fun UnlockScreen(
     onUnlocked: () -> Unit,
+    isDeviceLock: Boolean = false,
     viewModel: UnlockViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -32,9 +33,12 @@ fun UnlockScreen(
         ) {
             Icon(Icons.Default.Shield, null, modifier = Modifier.size(72.dp), tint = MaterialTheme.colorScheme.primary)
             Spacer(Modifier.height(16.dp))
-            Text(stringResource(R.string.unlock_title), style = MaterialTheme.typography.headlineMedium)
             Text(
-                stringResource(R.string.unlock_subtitle),
+                stringResource(if (isDeviceLock) R.string.device_lock_title else R.string.unlock_title),
+                style = MaterialTheme.typography.headlineMedium
+            )
+            Text(
+                stringResource(if (isDeviceLock) R.string.device_lock_subtitle else R.string.unlock_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

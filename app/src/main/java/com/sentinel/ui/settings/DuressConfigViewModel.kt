@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sentinel.data.repository.PasswordRepository
 import com.sentinel.data.repository.SensitiveFilesRepository
+import com.sentinel.service.lock.DeviceLockController
 import com.sentinel.domain.model.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DuressConfigViewModel @Inject constructor(
     private val passwordRepository: PasswordRepository,
-    private val sensitiveFilesRepository: SensitiveFilesRepository
+    private val sensitiveFilesRepository: SensitiveFilesRepository,
+    private val deviceLockController: DeviceLockController
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DuressConfigUiState())
@@ -86,6 +88,7 @@ class DuressConfigViewModel @Inject constructor(
             return
         }
         passwordRepository.setMainPassword(pwd)
+        viewModelScope.launch { deviceLockController.setEnabled(true) }
         _uiState.update { it.copy(mainPassword = "") }
         _messageKey.value = "main_password_saved"
         load()

@@ -36,6 +36,8 @@ class PreferencesDataStore @Inject constructor(
         val FAILED_UNLOCK_COUNT = intPreferencesKey("failed_unlock_count")
         val APP_LANGUAGE = stringPreferencesKey(Constants.KEY_APP_LANGUAGE)
         val APP_UNLOCKED = booleanPreferencesKey("app_unlocked")
+        val DEVICE_LOCK_ENABLED = booleanPreferencesKey("device_lock_enabled")
+        val DEVICE_SESSION_UNLOCKED = booleanPreferencesKey("device_session_unlocked")
     }
 
     val activeProfileId: Flow<Long> = context.dataStore.data.map {
@@ -63,6 +65,14 @@ class PreferencesDataStore @Inject constructor(
         it[Keys.APP_UNLOCKED] ?: false
     }
 
+    val deviceLockEnabled: Flow<Boolean> = context.dataStore.data.map {
+        it[Keys.DEVICE_LOCK_ENABLED] ?: false
+    }
+
+    val deviceSessionUnlocked: Flow<Boolean> = context.dataStore.data.map {
+        it[Keys.DEVICE_SESSION_UNLOCKED] ?: false
+    }
+
     val appLanguage: Flow<AppLanguage> = context.dataStore.data.map { prefs ->
         prefs[Keys.APP_LANGUAGE]?.let { AppLanguage.fromCode(it) }
             ?: LocaleManager.currentLanguage(context)
@@ -81,6 +91,10 @@ class PreferencesDataStore @Inject constructor(
     suspend fun setAppLanguage(language: AppLanguage) = edit { it[Keys.APP_LANGUAGE] = language.code }
     suspend fun setAppUnlocked(unlocked: Boolean) = edit { it[Keys.APP_UNLOCKED] = unlocked }
     suspend fun lockApp() = setAppUnlocked(false)
+    suspend fun setDeviceLockEnabled(enabled: Boolean) = edit { it[Keys.DEVICE_LOCK_ENABLED] = enabled }
+    suspend fun setDeviceSessionUnlocked(unlocked: Boolean) = edit {
+        it[Keys.DEVICE_SESSION_UNLOCKED] = unlocked
+    }
 
     private suspend fun edit(transform: suspend (MutablePreferences) -> Unit) {
         context.dataStore.edit { transform(it) }

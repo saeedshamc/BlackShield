@@ -7,6 +7,7 @@ import com.sentinel.domain.model.*
 import com.sentinel.domain.usecase.rule.ProcessSecurityEventUseCase
 import com.sentinel.data.repository.SecurityEventRepository
 import com.sentinel.domain.usecase.security.LockAppUseCase
+import com.sentinel.service.lock.DeviceLockController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,13 +20,18 @@ class BootReceiver : BroadcastReceiver() {
 
     @Inject lateinit var securityEventRepository: SecurityEventRepository
     @Inject lateinit var lockApp: LockAppUseCase
+    @Inject lateinit var deviceLockController: DeviceLockController
 
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
         val pending = goAsync()
         CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
             try {
+                deviceLockController.lockSession()
                 lockApp()
+                if (deviceLockController.shouldShowLock()) {
+                    deviceLockController.presentLockScreen()
+                }
                 securityEventRepository.logEvent(
                     SecurityEvent(
                         eventType = EventType.SETTINGS_CHANGED,
